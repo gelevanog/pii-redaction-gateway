@@ -1,0 +1,48 @@
+# Application logs and config snippets with secrets. All keys below are fake and deliberately malformed
+# (wrong length or checksum), so they cannot be confused with live credentials. AKIAIOSFODNN7EXAMPLE is AWS's documented example key.
+
+### log-001 | logs | en | api-key
+2026-10-01T12:04:55Z WARN upstream retry provider=openai key=[[sk-proj-Fq83mZpL2xVt7NcW1bRe9KdA|SECRET]] attempt=2
+
+### log-002 | logs | en | bearer
+GET /v2/devices HTTP/1.1 Host: api.brightloop.com Authorization: Bearer [[eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjQ4MjF9.dGVzdC1zaWduYXR1cmU|SECRET]] User-Agent: okhttp/4.12
+
+### log-003 | logs | en | email-ip
+INFO login ok user=[[t.nakamura@brightloop-partner.jp|EMAIL]] ip=[[198.51.100.77|IP_ADDRESS]] mfa=totp
+
+### log-004 | logs | en | negative
+INFO scheduler tick jobs=14 queued=3 failed=0 duration_ms=412 build=7c1e9a2
+
+### log-005 | logs | en | connection-string
+DATABASE_URL=postgres://app_user:[[Xk9#mT2vQp!|SECRET]]@db.internal:5432/brightloop
+
+### log-006 | logs | en | github-token
+export GITHUB_TOKEN=[[ghp_R2d9KfL0pQs8XnB4vZ1mT7wYc3HjE6aU5iO|SECRET]]
+
+### log-007 | logs | en | hard:hash-not-secret
+DEBUG cache hit key=sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08 ttl=300
+
+### log-008 | logs | en | aws
+aws_access_key_id = [[AKIAIOSFODNN7EXAMPLE|SECRET]]
+aws_secret_access_key = [[wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY|SECRET]]
+
+### log-009 | logs | en | ipv6
+WARN rate limit exceeded client=[[2a02:8108:1a40:3e00:4d3:9e1f:61a2:7c0b|IP_ADDRESS]] path=/api/login count=31
+
+### log-010 | logs | en | uuid-not-secret
+INFO device registered device_id=3f2b8c1e-7a4d-4e9b-b1c2-5d6e7f8a9b0c firmware=4.1.2
+
+### log-011 | logs | en | password-json
+{"event":"signup","email":"[[o.adeyemi@gmail.com|EMAIL]]","password":"[[Lagos2024$secure|SECRET]]","plan":"pro"}
+
+### log-012 | logs | en | stripe-like
+billing webhook verified, secret=[[wh_4kT9pL2xQm8vB7nR3cZ1|SECRET]] event=invoice.paid
+
+### log-013 | logs | en | negative
+ERROR timeout after 30000ms calling inventory-service; circuit breaker open; fallback used
+
+### log-014 | logs | en | phone-in-log
+INFO sms sent to=[[+14155550199|PHONE]] template=otp_v2 status=queued
+
+### log-015 | logs | en | basic-auth
+DEBUG outgoing request to partner api, Authorization: Basic [[YWRtaW46c3VwZXJzZWNyZXQ=|SECRET]] timeout=10s

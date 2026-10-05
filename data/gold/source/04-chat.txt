@@ -1,0 +1,58 @@
+# Chat logs (live chat, messenger), informal.
+
+### chat-001 | chat | en | lowercase
+customer: hi its [[jenny|PERSON]] again, still no sound on the doorbell
+agent: Hi [[Jenny|PERSON]], sorry to hear that! Can you confirm the email on the account?
+customer: [[jenny.walsh88@hotmail.com|EMAIL]]
+
+### chat-002 | chat | en | phone-spaced
+customer: call me pls on [[07700 900321|PHONE]] after 5
+agent: Thanks, we'll call you within the hour.
+
+### chat-003 | chat | en | negative
+customer: does the thermostat work with google home?
+agent: Yes, it works with Google Home, Alexa and Apple Home.
+customer: great thx
+
+### chat-004 | chat | en | address-informal
+customer: deliver to [[12 baker st, london nw1 6xe|ADDRESS]] not my office pls
+agent: Updated, thank you!
+
+### chat-005 | chat | en | name-as-word
+customer: my name is [[Summer Lee|PERSON]] and I want to return the lights. summer sale price was better anyway lol
+
+### chat-006 | chat | en | card-in-chat
+customer: just charge this one [[4960308246281940|CREDIT_CARD]] cvv is 113
+agent: Please never share card details in chat. I've removed the message from our records.
+
+### chat-007 | chat | en | agent-name
+agent: Hi, I'm [[Alex|PERSON]] from Brightloop. How can I help?
+customer: hey [[Alex|PERSON]], my camera shows "offline" since yesterday
+
+### chat-008 | chat | en | negative
+customer: what's the warranty period for the halo cam?
+agent: 2 years from the date of purchase, extendable to 3 with Brightloop Care.
+
+### chat-009 | chat | en | handle-not-pii
+customer: I posted it in the community forum under the "help needed" tag, thread 4412.
+
+### chat-010 | chat | en | ip-and-mac
+customer: router shows the hub as [[10.0.0.23|IP_ADDRESS]], mac 3C:71:BF:9A:12:4E, but the app can't find it
+
+### chat-011 | chat | en | name-common-word
+customer: hi, [[Ivy|PERSON]] here. the ivy on my wall blocks the camera lol, can i mount it higher?
+
+### chat-012 | chat | en | email-uppercase
+customer: my login is [[MARK.T.EVANS@YAHOO.CO.UK|EMAIL]] but reset emails never arrive
+
+### chat-013 | chat | en | partial-name
+agent: Thanks Mr. [[Hughes|PERSON]], I've escalated it.
+customer: it's Dr. [[Hughes|PERSON]] actually, but no worries
+
+### chat-014 | chat | en | negative
+customer: lol ok
+agent: Is there anything else I can help you with today?
+customer: nope that's all, thanks!
+
+### chat-015 | chat | en | secret-pasted
+customer: my wifi password is [[sunflower-Bay-7731|SECRET]] if your tech needs it for the install

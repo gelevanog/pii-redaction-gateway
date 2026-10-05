@@ -1,0 +1,78 @@
+# German, Spanish, Russian and mixed-language texts.
+
+### de-001 | email | de | address
+Sehr geehrte Damen und Herren, bitte ändern Sie meine Lieferadresse auf [[Lindenstraße 27, 50674 Köln|ADDRESS]]. Mit freundlichen Grüßen, [[Jürgen Hoffmann|PERSON]]
+
+### de-002 | support | de | phone-iban
+Hallo, hier ist [[Katrin Schulz|PERSON]]. Bitte erstatten Sie den Betrag auf [[DE89 3704 0044 0532 0130 00|IBAN]]. Sie erreichen mich unter [[0170 3829104|PHONE]].
+
+### de-003 | support | de | negative
+Das Thermostat zeigt seit dem Update keine Temperatur mehr an. Neustart hat nicht geholfen. Gibt es eine Lösung?
+
+### de-004 | hr | de | dob
+Neuer Mitarbeiter: [[Felix Wagner|PERSON]], geboren am [[14.02.1988|DATE_OF_BIRTH]], wohnhaft in der [[Bergstraße 5a, 69120 Heidelberg|ADDRESS]].
+
+### de-005 | crm | de | org
+Termin mit Frau Dr. [[Sabine Krüger|PERSON]] von der [[Stadtwerke Ulm GmbH|ORGANIZATION]] am Donnerstag. E-Mail: [[s.krueger@stadtwerke-ulm.de|EMAIL]]
+
+### de-006 | chat | de | email-obfuscated
+kunde: schreibt mir bitte an [[tobias punkt richter at gmx punkt de|EMAIL]], die andere adresse geht nicht mehr
+
+### de-007 | support | de | hard:name-as-word
+Herr [[Weiß|PERSON]] meldet, dass die weiße Lampe flackert. Die Rechnung ging an [[Martin Weiß|PERSON]], [[Am Markt 3, 04109 Leipzig|ADDRESS]].
+
+### es-001 | support | es | basic
+Hola, soy [[Lucía Fernández Ortega|PERSON]]. Mi DNI es [[48291037F|NATIONAL_ID]] y vivo en [[Calle de Alcalá 112, 28009 Madrid|ADDRESS]]. Mi móvil es [[+34 612 48 93 07|PHONE]].
+
+### es-002 | email | es | iban
+Buenos días, les ruego que hagan la devolución a la cuenta [[ES91 2100 0418 4502 0005 1332|IBAN]], a nombre de [[Jorge Ramírez|PERSON]]. Gracias.
+
+### es-003 | chat | es | negative
+cliente: ¿el termostato funciona con calefacción de suelo radiante?
+agente: Sí, es compatible con sistemas de 24V y con suelo radiante.
+
+### es-004 | hr | es | nie-dob
+Nueva empleada: [[Valentina Rossi|PERSON]], NIE [[X4718293G|NATIONAL_ID]], fecha de nacimiento [[3 de mayo de 1995|DATE_OF_BIRTH]].
+
+### es-005 | crm | es | org-phone
+Llamar a [[Andrés Molina|PERSON]] de [[Construcciones Levante S.L.|ORGANIZATION]] al [[963 45 21 78|PHONE]] para confirmar el pedido de 60 unidades.
+
+### es-006 | support | es | hard:dni-invalid
+El número de pedido es 48291037Q y la factura es la FA-2026-0912. ¿Pueden revisar el envío?
+
+### ru-001 | support | ru | basic
+Здравствуйте! Меня зовут [[Иван Смирнов|PERSON]], мой телефон [[+7 916 123-45-67|PHONE]], почта [[ivan.smirnov@yandex.ru|EMAIL]]. Термостат не включается.
+
+### ru-002 | support | ru | address
+Прошу доставить заказ по адресу: [[ул. Ленина, д. 10, кв. 5, Москва|ADDRESS]]. Получатель [[Ольга Кузнецова|PERSON]].
+
+### ru-003 | hr | ru | dob
+Сотрудник [[Дмитрий Волков|PERSON]], дата рождения [[12.07.1985|DATE_OF_BIRTH]], работал ранее в [[Сбербанк|ORGANIZATION]].
+
+### ru-004 | chat | ru | negative
+клиент: подскажите, камера работает при минусовой температуре?
+оператор: Да, до минус 20 градусов.
+
+### ru-005 | email | ru | card
+Пожалуйста, верните деньги на карту [[5384 2684 6563 2121|CREDIT_CARD]]. С уважением, [[Анна Белова|PERSON]].
+
+### mix-001 | chat | mixed | de-en
+customer: hi, I'm [[Lena Fischer|PERSON]] from Berlin. Meine Nummer ist [[+49 30 9018 2744|PHONE]], please call in English or German.
+
+### mix-002 | email | mixed | es-en
+Hi team, our client [[Pablo Herrera|PERSON]] (Madrid office) asked: "¿pueden enviar la factura a [[pablo.herrera@tecnova.es|EMAIL]]?" Please do.
+
+### mix-003 | crm | mixed | ru-en
+Lead from the Moscow expo: [[Sergey Popov|PERSON]] / [[Сергей Попов|PERSON]], [[Technoservice LLC|ORGANIZATION]], [[+7 495 123-45-67|PHONE]].
+
+### mix-004 | support | mixed | fr-en
+Merci! The installer [[Julien Moreau|PERSON]] will come on Friday to [[7 avenue Victor Hugo, 75016 Paris|ADDRESS]].
+
+### de-008 | logs | de | secret
+Passwort für den Testzugang: [[Sommer2026!Haus|SECRET]] (bitte nach dem Login ändern)
+
+### es-007 | chat | es | name-as-word
+cliente: soy [[Rosa|PERSON]], la de la lámpara rosa que llegó rota
+
+### nl-001 | hr | nl | bsn
+Nieuwe medewerker [[Daan Janssen|PERSON]], BSN [[385280841|NATIONAL_ID]], IBAN [[NL91 ABNA 0417 1643 00|IBAN]].

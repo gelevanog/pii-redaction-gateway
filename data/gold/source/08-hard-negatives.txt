@@ -1,0 +1,73 @@
+# Negatives (no PII; must stay untouched) and adversarial hard cases.
+
+### neg-001 | support | en | negative
+Our office is closed on public holidays. Orders placed on weekends ship on Monday.
+
+### neg-002 | support | en | negative:numbers
+Order #4829134, invoice INV-2026-00981, SKU BL-AURA-2, 3 units at $129.99, total $389.97 incl. 8.25% tax.
+
+### neg-003 | support | en | negative:cities
+We ship to London, Paris, Berlin, Madrid and Moscow. Delivery to Jordan and Georgia takes longer.
+
+### neg-004 | support | en | negative:luhn-fail
+Serial numbers: 4111 2222 3333 4444 and 5500 1234 5678 9010. Please register both devices.
+
+### neg-005 | logs | en | negative:versions
+Upgraded nginx 1.25.3 -> 1.27.2, openssl 3.0.13, node 20.11.1; rollback tag v2.4.1.7 kept for 30 days.
+
+### neg-006 | email | en | negative:brand
+Brightloop Aura, Brightloop Halo and Brightloop Glow are trademarks of Brightloop Inc. All rights reserved.
+
+### neg-007 | support | en | negative:time
+The outage lasted from 10:42:15 to 11:03:58 UTC on 2026-09-30. Affected: 3.2% of hubs in eu-west-1.
+
+### neg-008 | chat | en | negative:names-as-words
+I will mark this as resolved. Hope the summer sale goes well, and may the new lights bring you joy!
+
+### neg-009 | support | en | negative:public-urls
+See https://brightloop.com/help/reset and https://status.brightloop.com for updates. Docs: https://docs.brightloop.com/api/v2/devices.
+
+### neg-010 | logs | en | negative:git
+Merge commit 1f3a9c7e2b4d6f8a0c1e3b5d7f9a2c4e6b8d0f13 into main; build #4412 passed in 6m 12s.
+
+### neg-011 | support | en | negative:measurements
+Recommended mounting height is 1.5 m; the sensor covers 120 degrees and 8 m range at 23 degrees C.
+
+### neg-012 | crm | en | negative:roles
+The CFO and the head of procurement want a demo next week; the IT manager asked about SSO.
+
+### hard-001 | support | en | hard:org-person-same
+I bought it at Ford's Hardware, but the receipt is under my name, [[Harrison Ford|PERSON]] (yes, really).
+
+### hard-002 | support | en | hard:phone-like-order
+Order 4155550132 still says processing. Please call me at [[415-555-0174|PHONE]] instead.
+
+### hard-003 | email | en | hard:email-in-sentence
+Reach [[me@danielle-ross.net|EMAIL]] or [[Danielle Ross|PERSON]] on the shared inbox; not support@brightloop.com.
+
+### hard-004 | support | en | hard:card-no-spaces
+paying with [[6011497465075291|CREDIT_CARD]] today, reference 6011497465075290 was the failed one
+
+### hard-005 | chat | en | hard:lowercase-names
+customer: hey this is [[maria garcia|PERSON]], my husband [[luis|PERSON]] ordered the lights
+
+### hard-006 | support | en | hard:address-no-comma
+Ship to [[1600 Pennsylvania Avenue NW Washington DC 20500|ADDRESS]] attention [[Robert Hayes|PERSON]]
+
+### hard-007 | support | en | hard:dob-words
+My birthday is [[October 9, 1979|DATE_OF_BIRTH]] in case you need it for the account recovery.
+
+### hard-008 | crm | en | hard:initials
+Spoke with [[J. Alvarez|PERSON]] and [[K. Thompson|PERSON]] about the pilot. Both agreed.
+
+### hard-009 | support | en | hard:unicode-name
+Customer [[Zoë Ångström-Nyqvist|PERSON]] reports the app shows her name as "Zo? ?ngstr?m".
+
+### hard-010 | chat | en | hard:email-at-word
+customer: my email is [[sarah.k at protonmail dot com|EMAIL]], i'm at work until 5 though
+
+### hard-011 | support | en | hard:negative-at
+We are at capacity right now; look at the docs dot page for help or try again at noon.
+
+### hard-012 | logs | en | hard:token-context
+retrying webhook with token [[Zx8vQ2mL9pR4tK7wB1nC|SECRET]] after 401

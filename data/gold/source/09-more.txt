@@ -1,0 +1,37 @@
+# Extra documents for entity types with little support elsewhere (SSN, national IDs, URLs, IPs, cards).
+
+### more-001 | hr | en | ssn-no-context
+Form I-9 copy attached for [[Tanya Brooks|PERSON]]: [[287-65-4321|US_SSN]], issued in Ohio.
+
+### more-002 | support | en | ssn-spaces
+To verify, my social security number is [[392 41 8876|US_SSN]] and my zip is 30309.
+
+### more-003 | crm | en | url-github
+Prospect [[Arjun Mehta|PERSON]] maintains an integration: [[https://github.com/arjunmehta-dev|URL]]. Repo page https://github.com/brightloop/sdk-python is ours.
+
+### more-004 | support | en | url-reset-token
+I clicked [[https://account.brightloop.com/reset?token=8f2kQ9zLm4Xv&user=nora.blake|URL]] but it says expired. Can you send a new one to [[nora.blake@icloud.com|EMAIL]]?
+
+### more-005 | logs | en | ips
+WARN blocked 3 requests from [[45.33.32.156|IP_ADDRESS]] and [[203.0.113.9|IP_ADDRESS]]; allowlisted 127.0.0.1 skipped
+
+### more-006 | support | es | dni
+Necesito cambiar el titular. Titular actual: [[Marta Gil|PERSON]], DNI [[71234528D|NATIONAL_ID]]. Nuevo titular: [[Hugo Gil|PERSON]], DNI [[05293846M|NATIONAL_ID]].
+
+### more-007 | crm | en | cards-mixed
+Two cards on file for [[Lisa Moreau|PERSON]]: Visa [[4661-3186-0913-9090|CREDIT_CARD]] (default) and Mastercard [[2221 1948 7574 9111|CREDIT_CARD]].
+
+### more-008 | email | en | calendly
+Book a slot with me here: [[https://calendly.com/oscar-lindgren/30min|URL]]. Best, [[Oscar Lindgren|PERSON]], [[Lindgren Consulting AB|ORGANIZATION]]
+
+### more-009 | hr | nl | bsn-dotted
+Personeelsdossier [[Fleur Bakker|PERSON]]: burgerservicenummer [[3537.99.075|NATIONAL_ID]], geboortedatum [[22-06-1997|DATE_OF_BIRTH]].
+
+### more-010 | support | en | card-in-sentence
+The payment with card number [[4170 3423 6671 2760|CREDIT_CARD]] was declined but my bank says it's fine.
+
+### more-011 | logs | en | ip-in-url
+GET http://[[172.16.4.21|IP_ADDRESS]]:8080/healthz 200 from monitor; client [[100.64.12.7|IP_ADDRESS]]
+
+### more-012 | support | en | negative:near-misses
+The SKU is 123-45-ABCD, the box code is 4400-1234-5678-ZZ and the warranty ID is W-2026-55512.

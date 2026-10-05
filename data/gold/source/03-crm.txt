@@ -1,0 +1,46 @@
+# CRM notes (English, terse, mixed formats).
+
+### crm-001 | crm | en | note
+2026-09-12 call w/ [[Peter Halvorsen|PERSON]] ([[Nordlys Energi AS|ORGANIZATION]]). Interested in 200 units. Budget approved. Next: send quote to [[peter.halvorsen@nordlys.no|EMAIL]].
+
+### crm-002 | crm | en | card-on-file
+Customer updated card on file: [[5537 8657 9754 3235|CREDIT_CARD]]. Old card 4111-xxxx-xxxx-1111 removed. Contact: [[Samuel Ortiz|PERSON]].
+
+### crm-003 | crm | en | negative
+Q3 pipeline review: 14 deals in negotiation, 3 closed won, average deal size up 12%. Focus on the education segment next quarter.
+
+### crm-004 | crm | en | address-and-phone
+Lead: [[Bianca Rossi|PERSON]], [[Via Garibaldi 22, 10122 Torino|ADDRESS]], mobile [[+39 347 123 4567|PHONE]]. Prefers WhatsApp.
+
+### crm-005 | crm | en | hard:person-org-overlap
+Met the founders of [[Morgan & Cole Architects|ORGANIZATION]] - [[Diane Morgan|PERSON]] and [[Ethan Cole|PERSON]]. [[Diane|PERSON]] handles purchasing.
+
+### crm-006 | crm | en | iban-note
+Payout account for reseller [[Kessler Haustechnik GmbH|ORGANIZATION]]: [[AT61 1904 3002 3457 3201|IBAN]]. Contact [[Elke Kessler|PERSON]].
+
+### crm-007 | crm | en | name-variant
+[[Victor Ramos|PERSON]] called again about the bulk order. [[Ramos|PERSON]] wants delivery before Nov 15. Spoke with [[Victor|PERSON]] for 20 min.
+
+### crm-008 | crm | en | hard:date-not-dob
+Renewal date 03/04/2027. Contract value 48k. Decision maker out of office until 10/20.
+
+### crm-009 | crm | en | url-with-id
+Customer profile link: [[https://crm.brightloop.com/customers/88213?email=lucas.meyer%40gmx.de|URL]] - duplicate of [[Lucas Meyer|PERSON]]'s older record.
+
+### crm-010 | crm | en | negative
+Updated the product catalogue: added the Halo Cam 2 bundle, retired the Aura v1, price list valid from January.
+
+### crm-011 | crm | en | short
+cb [[Lin Zhou|PERSON]] [[+86 138 0013 8000|PHONE]] re: invoice
+
+### crm-012 | crm | en | name-as-word
+Bill [[Bill Henderson|PERSON]] for the extra installation hours. He agreed on the phone.
+
+### crm-013 | crm | en | uk-landline
+Office number for [[Ashford Dental Practice|ORGANIZATION]]: [[020 7946 0832|PHONE]]. Ask for the practice manager, [[Gemma Hart|PERSON]].
+
+### crm-014 | crm | en | ssn-tax
+Contractor W-9 received. [[Carlos Mendez|PERSON]], SSN [[613-27-4410|US_SSN]], address on file [[1880 Ocean Drive, Miami Beach, FL 33139|ADDRESS]].
+
+### crm-015 | crm | en | hard:org-only
+Competitor analysis: Nest and Ecobee both dropped prices this week; Brightloop pricing unchanged.

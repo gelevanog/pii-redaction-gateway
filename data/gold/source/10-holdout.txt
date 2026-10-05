@@ -1,0 +1,117 @@
+# Held-out split: written after the pattern recognizers and NER post-processing were frozen and never used
+# for tuning. Reported separately in the README.
+
+### ho-001 | support | en | holdout
+Hello! I'm moving next week, so please update the delivery address on order BL-551203 to [[88 Harbour View Road, Apt 12, Portland, ME 04101|ADDRESS]]. Thanks, [[Megan Doyle|PERSON]]
+
+### ho-002 | support | en | holdout
+The motion alerts go to my old email. Please switch them to [[m.okafor@fastmail.com|EMAIL]]. My phone for SMS alerts is [[+1 (646) 555-0137|PHONE]]. [[Michael Okafor|PERSON]]
+
+### ho-003 | chat | en | holdout
+customer: hiya, it's [[becky|PERSON]] from flat 3
+agent: Hi [[Becky|PERSON]]! What can I do for you?
+customer: the doorbell chime is too quiet, my partner [[Sam|PERSON]] can't hear it upstairs
+
+### ho-004 | email | en | holdout
+Dear support,
+My father, [[Harold Simmons|PERSON]], passed away in August. I'd like to close his account and cancel the subscription. I'm his executor; you can reach me at [[claire.simmons@btinternet.com|EMAIL]] or [[01632 960871|PHONE]].
+Regards, [[Claire Simmons|PERSON]]
+
+### ho-005 | crm | en | holdout
+Demo for [[Pinewood Senior Living|ORGANIZATION]] went well. [[Tasha Reynolds|PERSON]] (ops director) wants pricing for 3 sites. [[Reynolds|PERSON]] prefers calls after 2pm.
+
+### ho-006 | support | en | holdout
+I've been charged for Brightloop Care although I cancelled. Card used: [[5182 1993 5181 9098|CREDIT_CARD]]. Please refund and confirm by email.
+
+### ho-007 | logs | en | holdout
+2026-10-02T03:11:09Z ERROR payment-worker failed to refresh token refresh_token=[[rt_9QmZ2vX7kLp4Wn8sB3cY6tR1|SECRET]] for account 88213
+
+### ho-008 | logs | en | holdout
+INFO request id=7f3c2a1b ip=[[91.198.174.192|IP_ADDRESS]] method=POST path=/v1/devices/pair status=201 duration=184ms
+
+### ho-009 | hr | en | holdout
+Reference check for [[Isabelle Durand|PERSON]]: worked at [[Maison Verte Paysages|ORGANIZATION]] 2019-2024, manager [[Thierry Blanc|PERSON]], [[+33 1 42 68 53 00|PHONE]].
+
+### ho-010 | medical | en | holdout
+Pt [[Kofi Mensah|PERSON]] (DOB [[30/01/1976|DATE_OF_BIRTH]]) seen for follow-up. BP stable. Next review in 3 months with Dr. [[Lindqvist|PERSON]].
+
+### ho-011 | support | en | holdout
+The lights flicker only when the dimmer is below 20%. Tried two different bulbs, same result.
+
+### ho-012 | support | en | holdout
+Why does the app ask for my location all the time? I only use the thermostat schedule, not geofencing.
+
+### ho-013 | chat | en | holdout
+customer: could u send the invoice to my wife instead? [[priya.nair@outlook.com|EMAIL]]
+agent: Sure, done!
+
+### ho-014 | email | de | holdout
+Guten Tag, ich heiße [[Monika Brenner|PERSON]] und wohne in der [[Gartenweg 14, 80995 München|ADDRESS]]. Die Kamera im Flur verliert ständig die Verbindung. Rückruf bitte unter [[089 2180 4417|PHONE]].
+
+### ho-015 | support | de | holdout
+Bitte überweisen Sie die Erstattung auf mein Konto [[DE75 5121 0800 1245 1261 99|IBAN]]. Kontoinhaber: [[Yusuf Demir|PERSON]].
+
+### ho-016 | chat | es | holdout
+cliente: hola, me llamo [[Carmen Ruiz|PERSON]], el pedido llegó a [[Avenida de la Constitución 21, 41004 Sevilla|ADDRESS]] pero falta el sensor
+agente: Lo siento, [[Carmen|PERSON]]. Le enviamos uno nuevo hoy.
+
+### ho-017 | support | es | holdout
+Mi correo es [[javier.soto@telefonica.net|EMAIL]] y mi DNI [[33719420V|NATIONAL_ID]]. Quiero darme de baja del servicio.
+
+### ho-018 | support | ru | holdout
+Добрый день. Пишет [[Елена Морозова|PERSON]]. Камера не подключается к Wi-Fi. Мой номер [[+7 921 555-38-12|PHONE]].
+
+### ho-019 | crm | en | holdout
+Quarterly check-in skipped, client on holiday. No action needed until January.
+
+### ho-020 | support | en | holdout
+Hi, the hub's IP keeps changing ([[192.168.0.114|IP_ADDRESS]] yesterday, [[192.168.0.131|IP_ADDRESS]] today). Can I set a static one in the app?
+
+### ho-021 | hr | en | holdout
+Payroll correction: [[Derek Walsh|PERSON]], SSN [[318-52-6094|US_SSN]], overtime for September was not paid.
+
+### ho-022 | support | en | holdout
+Account recovery: my birthday is [[11 November 1988|DATE_OF_BIRTH]] and I registered with [[tom.baxter88@gmail.com|EMAIL]]. Name [[Tom Baxter|PERSON]].
+
+### ho-023 | email | en | holdout
+Hi [[Ruth|PERSON]], attaching the signed contract from [[Okafor & Daughters Ltd|ORGANIZATION]]. Their director, [[Ngozi Okafor|PERSON]], asked for the first delivery on 3 November.
+
+### ho-024 | logs | en | holdout
+WARN config loaded from env: SMTP_PASSWORD=[[q7Rz!m2Lp9Vx|SECRET]] SMTP_USER=[[alerts@brightloop-mail.net|EMAIL]]
+
+### ho-025 | support | en | holdout
+My son [[Leo|PERSON]] reset the thermostat to factory settings and now it doesn't show up. Can someone call me? [[07700 900554|PHONE]]
+
+### ho-026 | crm | en | holdout
+Inbound lead via website form: [[Grace Liu|PERSON]], [[Liu Family Dental|ORGANIZATION]], interested in 8 cameras for two clinics.
+
+### ho-027 | support | en | holdout
+the order number is 7712 4490 0213 8856 and it says cancelled?? i didnt cancel anything
+
+### ho-028 | chat | en | holdout
+customer: my linkedin is [[linkedin.com/in/oliver-steinberg|URL]] if your sales team wants to connect about the office install
+
+### ho-029 | support | nl | holdout
+Hallo, mijn naam is [[Pieter van Dijk|PERSON]], ik woon op [[Keizersgracht 221, 1016 DV Amsterdam|ADDRESS]]. Mijn telefoonnummer is [[06 12345678|PHONE]].
+
+### ho-030 | logs | en | holdout
+DEBUG slack notify webhook token=[[T0K3N-a8f2Qz71LmPx|SECRET]] channel=#alerts
+
+### ho-031 | email | en | holdout
+Our team at [[Ridgeway Primary School|ORGANIZATION]] loves the lights. Could you invoice [[bursar@ridgeway.sch.uk|EMAIL]]? Many thanks, [[Hope Adeyemi|PERSON]]
+
+### ho-032 | support | en | holdout
+Can I use the camera with a 5 GHz network? The router is a TP-Link Archer AX55.
+
+### ho-033 | support | en | holdout
+I paid by bank transfer from [[GB94 BARC 2003 2647 5164 29|IBAN]] last Tuesday and the order still shows unpaid.
+
+### ho-034 | hr | en | holdout
+Visitor badge for [[Kenji Watanabe|PERSON]] from [[Sakura Robotics|ORGANIZATION]], Monday 10:00, host [[Anika|PERSON]].
+
+### ho-035 | chat | en | holdout
+customer: is it normal that the thermostat clicks every 10 minutes?
+agent: Yes, that's the relay. It's harmless.
+
+### ho-036 | support | en | holdout
+Please don't call [[555-0148|PHONE]], that's my old number. New one: [[(312) 555-0109|PHONE]]. - [[Andre Thomas|PERSON]]

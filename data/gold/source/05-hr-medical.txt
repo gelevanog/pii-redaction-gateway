@@ -1,0 +1,46 @@
+# HR and medical-style notes (no real people; all values invented).
+
+### hr-001 | hr | en | onboarding
+New starter: [[Rebecca Lyons|PERSON]], start date 1 December. DOB [[17/08/1993|DATE_OF_BIRTH]]. Home address [[3 Orchard Close, Cambridge CB4 1XD|ADDRESS]]. Emergency contact [[Paul Lyons|PERSON]] [[07700 900817|PHONE]].
+
+### hr-002 | hr | en | ssn
+Payroll setup for [[Jamal Carter|PERSON]]: SSN [[471-62-9035|US_SSN]], direct deposit details are on the attached form.
+
+### hr-003 | hr | en | negative
+Reminder: performance reviews are due by the end of the month. Use the new template and submit through the HR portal.
+
+### hr-004 | hr | en | sick-note
+[[Oliver Grant|PERSON]] called in sick (migraine) for Mon-Tue. Manager [[Hannah Kim|PERSON]] informed. Doctor's note from [[Riverside Medical Centre|ORGANIZATION]] to follow.
+
+### med-001 | medical | en | patient
+Patient: [[Eleanor Voss|PERSON]], DOB: [[1949-11-23|DATE_OF_BIRTH]]. Referred by Dr. [[Amit Shah|PERSON]] at [[St. Mary's Hospital|ORGANIZATION]]. Presenting with shortness of breath; follow-up in 2 weeks.
+
+### med-002 | medical | en | hard:dates
+Admitted 2026-03-02, discharged 2026-03-09. Next appointment 2026-04-15. Medication unchanged.
+
+### med-003 | medical | en | phone-and-address
+Home visit for Mr. [[Albert Fenwick|PERSON]], [[27 Hillcrest Road, Leeds LS6 2QX|ADDRESS]]. Daughter [[Judith|PERSON]] can be reached on [[0113 496 0742|PHONE]].
+
+### hr-005 | hr | en | name-as-word
+Candidate [[Faith Okoro|PERSON]] accepted the offer. Faith in the hiring process restored, says the recruiter.
+
+### hr-006 | hr | en | linkedin-and-email
+Referral: [[Dominik Wójcik|PERSON]] ([[https://linkedin.com/in/dominik-wojcik-dev|URL]], [[d.wojcik@proton.me|EMAIL]]) for the backend role. Currently at [[Allegro|ORGANIZATION]].
+
+### med-004 | medical | en | negative
+Clinic update: flu vaccines available from Monday; walk-ins welcome between 9 and 11.
+
+### hr-007 | hr | en | dob-text
+Background check form: full name [[Natalia Ivanova|PERSON]], date of birth [[5 March 1990|DATE_OF_BIRTH]], previous employer [[Kaspersky Lab|ORGANIZATION]].
+
+### med-005 | medical | en | insurance-id
+Insurance member [[Gloria Estrada|PERSON]], phone [[(305) 555-0164|PHONE]], email [[gloria.estrada@aol.com|EMAIL]]. Claim for physiotherapy sessions 3-8.
+
+### hr-008 | hr | en | exit
+Exit interview with [[Marcus|PERSON]] scheduled Friday. Return laptop and badge. Forwarding address: [[4417 Elm Street, Austin, TX 78751|ADDRESS]].
+
+### med-006 | medical | en | june-as-name
+[[June Park|PERSON]] rescheduled her June appointment to July 3.
+
+### hr-009 | hr | en | bank
+Expense reimbursement to [[NL20 INGB 0001 2345 67|IBAN]] for [[Sanne de Vries|PERSON]], BSN [[121547280|NATIONAL_ID]].

@@ -1,0 +1,44 @@
+# Evaluation config: `pii-shield eval detection|leak|utility -c configs/eval.yaml`.
+# Every OpenRouter model id must end in ":free" while require_free_models is true (checked on load and
+# again against the model OpenRouter actually served).
+gold: data/gold/gold.jsonl
+output_dir: results
+policy: support-chat          # thresholds and allow-list used for the detection metrics
+
+ner_model: knowledgator/gliner-pii-base-v1.0
+ner_compare:                  # scored as patterns + model, for the model-choice table
+  - knowledgator/gliner-pii-edge-v1.0
+  - urchade/gliner_multi_pii-v1
+
+detectors:
+  - {name: patterns, label: "Patterns + validators", patterns: true}
+  - {name: patterns+ner, label: "Patterns + NER", patterns: true, ner: true}
+  - {name: patterns+ner+llm, label: "Patterns + NER + LLM", patterns: true, ner: true, llm: true}
+
+llm_detector:
+  provider: openrouter
+  model: nvidia/nemotron-3-super-120b-a12b:free
+  fallback_models: [dots-studio/dots-3-note-preview:free]
+
+leak_policies: [support-chat, strict-finance, natural-text, analytics-irreversible]
+leak_detectors: [patterns, patterns+ner]
+
+utility:
+  task: reply
+  documents: 20
+  domains: [support, email, chat]
+  policy: support-chat
+  model:
+    provider: openrouter
+    model: nvidia/nemotron-3-super-120b-a12b:free
+    fallback_models: [qwen/qwen3.8-27b:free]
+  judge:                      # a different model family than the one being judged
+    provider: openrouter
+    model: dots-studio/dots-3-note-preview:free
+    fallback_models: [google/gemma-4-31b-it:free]
+
+require_free_models: true
+max_calls: 300                # hard budget of real requests (retries included), counted in results/calls.jsonl
+min_seconds_between_requests: 3.0
+llm_concurrency: 3
+llm_subset_every: 3            # the LLM-detector comparison runs on every 3rd document (free-tier budget)

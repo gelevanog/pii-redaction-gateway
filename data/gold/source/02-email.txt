@@ -1,0 +1,57 @@
+# Emails (English).
+
+### eml-001 | email | en | full
+From: [[Laura Chen|PERSON]] <[[laura.chen@northbridge-legal.com|EMAIL]]>
+To: billing@brightloop.com
+Subject: Invoice dispute
+
+Hello, we were invoiced for 12 licences but use 9. Please correct and resend to me. [[Laura Chen|PERSON]], Paralegal, [[Northbridge Legal LLP|ORGANIZATION]], direct line [[+1 312 555 0178|PHONE]].
+
+### eml-002 | email | en | forward-chain
+---------- Forwarded message ---------
+From: [[Ben Ashworth|PERSON]] <[[ben.ashworth@gmail.com|EMAIL]]>
+Hi [[Claire|PERSON]], can you handle this one? The customer lives at [[9 Castle Street, Edinburgh EH2 3AH|ADDRESS]] and wants an engineer visit.
+
+### eml-003 | email | en | negative
+Hi team, reminder that the quarterly planning meeting moves to Thursday 10:00. Agenda and slides are in the shared drive. Thanks!
+
+### eml-004 | email | en | hard:names-as-words
+Subject: Hope you can help
+
+Dear Brightloop, I hope this finds you well. My daughter [[Hope Jackson|PERSON]] set up the account, but she moved to college in May. Please transfer it to me, [[Frank Jackson|PERSON]].
+
+### eml-005 | email | en | iban-transfer
+Please refund by bank transfer. IBAN: [[DE44 5001 0517 5407 3249 31|IBAN]], BIC INGDDEFFXXX, account holder [[Markus Brandt|PERSON]].
+
+### eml-006 | email | en | hard:iban-invalid
+Our payment reference is DE12 3456 7890 1234 5678 90 - sorry, that's the internal booking code, not an IBAN. The transfer went out on Monday.
+
+### eml-007 | email | en | linkedin
+Thanks for the call today. As promised, here is my profile: [[https://www.linkedin.com/in/maria-gonzalez-pm|URL]]. Looking forward to the partnership with [[Vantage Retail Group|ORGANIZATION]].
+
+### eml-008 | email | en | multiple-people
+Hi [[Josh|PERSON]], looping in [[Amira Haddad|PERSON]] (cc) who owns procurement on our side, and Dr. [[Stefan Novak|PERSON]] from our IT security team.
+
+### eml-009 | email | en | dob-in-context
+For the warranty claim you need the buyer's details: [[Patricia Moore|PERSON]], born [[June 2, 1958|DATE_OF_BIRTH]], [[44 Willow Lane, Columbus, OH 43215|ADDRESS]].
+
+### eml-010 | email | en | negative
+The webinar recording is now available on our website. Topics: energy savings with smart thermostats, scheduling best practices, and Q&A.
+
+### eml-011 | email | en | signature-mobile
+Sent from my iPhone
+
+[[Jake Morrison|PERSON]]
+m. [[07700 900461|PHONE]]
+
+### eml-012 | email | en | org-and-person
+Our account manager at [[Fairway Insurance|ORGANIZATION]], [[Leonard Pike|PERSON]], says the claim needs a technician report. Can you provide one?
+
+### eml-013 | email | en | email-obfuscated-brackets
+Contact for the installer: [[mike.d [at] proinstall [dot] net|EMAIL]] (please don't put it on the public ticket).
+
+### eml-014 | email | en | hard:public-emails
+For press inquiries write to press@brightloop.com; for jobs see careers@brightloop.com. Our office hours are 9-5 CET.
+
+### eml-015 | email | en | phone-extension
+Call our front desk at [[+1 646 555 0110|PHONE]] ext. 204 and ask for [[Nadia|PERSON]].

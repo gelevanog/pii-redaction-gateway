@@ -1,0 +1,95 @@
+# Support tickets (English). Markup: [[value|TYPE]]. One document per "### id | domain | lang | tags" header.
+
+### sup-001 | support | en | basic
+Hi, my thermostat stopped heating after last night's update. This is [[Anna Petrova|PERSON]], account email [[anna.petrova@gmail.com|EMAIL]]. Please call me back on [[+44 7911 123456|PHONE]], it is freezing in here.
+
+### sup-002 | support | en | address
+Order hasn't arrived. Shipping address was [[221 Maple Avenue, Apt 4B, Springfield, IL 62704|ADDRESS]]. Tracking says delivered but nothing at the door. - [[Kevin O'Brien|PERSON]]
+
+### sup-003 | support | en | name-variants
+Hello, [[Daniel Kovacs|PERSON]] here. I spoke to your agent [[Priya|PERSON]] yesterday and she promised a refund. Mr. [[Kovacs|PERSON]] is still waiting, as is my wife [[Eszter|PERSON]].
+
+### sup-004 | support | en | card
+I was charged twice for the camera bundle. The card ending 4471 shows two payments. Can you refund one? Full number if you need it: [[4526 0181 5908 3012|CREDIT_CARD]].
+
+### sup-005 | support | en | hard:luhn-fail
+My tracking number is 4685 9952 8907 8667 and the order reference is BL-482913. Please check where the parcel is.
+
+### sup-006 | support | en | phone-us
+Doorbell keeps disconnecting from wifi. I'm reachable at [[(415) 555-2671|PHONE]] after 6pm Pacific. Thanks, [[Marcus Webb|PERSON]]
+
+### sup-007 | support | en | name-as-word
+Will the new firmware fix the motion sensor? I hope so. My neighbour [[Will Turner|PERSON]] has the same problem with his unit.
+
+### sup-008 | support | en | name-as-word
+Thanks for the quick help, [[Grace|PERSON]]! Everything works now. Have a nice day and say hi to [[Mark|PERSON]] from the install team.
+
+### sup-009 | support | en | negative
+The app crashes when I open the camera tab on Android 14. Reinstalling did not help. Version 3.2.1 of the app, phone is a Pixel 8.
+
+### sup-010 | support | en | email-obfuscated
+pls reply to [[jsmith2009 at yahoo dot com|EMAIL]], my work mail blocks your newsletters. thx [[John Smith|PERSON]]
+
+### sup-011 | support | en | iban
+For the refund please use my account [[GB29 NWBK 6016 1331 9268 19|IBAN]] (NatWest). Name on the account: [[Olivia Bennett|PERSON]].
+
+### sup-012 | support | en | organization
+I'm the facilities manager at [[Harrow Valley School|ORGANIZATION]] and we bought 40 light strips. Invoice should go to [[accounts@harrowvalley.sch.uk|EMAIL]].
+
+### sup-013 | support | en | allow-list
+Forwarding this to support@brightloop.com as instructed. The customer, [[Hannah Lee|PERSON]], says Brightloop promised a callback within 24h.
+
+### sup-014 | support | en | international-phone
+Bonjour, I'm writing in English for simplicity. Customer [[Camille Laurent|PERSON]], tel [[+33 6 12 34 56 78|PHONE]], lives at [[18 rue des Lilas, 69003 Lyon|ADDRESS]]. Her hub is offline.
+
+### sup-015 | support | en | negative
+Is the Aura thermostat compatible with two-stage heat pumps? The spec sheet mentions 24V systems only.
+
+### sup-016 | support | en | dob
+To verify my identity: date of birth [[12/03/1984|DATE_OF_BIRTH]], postcode SW1A 1AA. Name is [[Thomas Reid|PERSON]].
+
+### sup-017 | support | en | hard:date-not-dob
+I bought it on 12/03/2024 and it broke on 05/09/2024, still under warranty. Please advise.
+
+### sup-018 | support | en | multiple
+Two accounts: mine ([[r.gupta@outlook.com|EMAIL]]) and my mother's ([[sunita.gupta52@gmail.com|EMAIL]]). [[Rahul Gupta|PERSON]] and [[Sunita Gupta|PERSON]]. Please merge them.
+
+### sup-019 | support | en | ip
+The camera is reachable on my LAN at [[192.168.1.37|IP_ADDRESS]] but not from outside. My public IP is [[81.2.69.142|IP_ADDRESS]].
+
+### sup-020 | support | en | hard:version-not-ip
+Firmware 2.14.0.3 broke scheduling; rollback to 2.13.9.1 fixed it. Can you confirm a fix is planned?
+
+### sup-021 | support | en | url-personal
+You can see the issue in my video: [[https://www.youtube.com/@danny-fixes-things|URL]]. Your help article https://brightloop.com/help/reset did not help.
+
+### sup-022 | support | en | password-pasted
+I can't log in. I tried my password [[Tulip!Garden2023|SECRET]] three times and now I'm locked out. Username is [[lena.fischer@web.de|EMAIL]].
+
+### sup-023 | support | en | name-as-word
+Rose gold is the color I ordered, not silver. Please exchange it. Regards, [[Rose Alvarez|PERSON]]
+
+### sup-024 | support | en | address-uk
+Please send the replacement to [[Flat 2, 47 Queen's Road, Brighton BN1 3XE|ADDRESS]]. I'm working from home all week.
+
+### sup-025 | support | en | negative
+How do I set up geofencing so the lights turn off when everyone leaves? The guide only covers iOS.
+
+### sup-026 | support | en | ssn
+Your billing partner asked for my SSN to do a credit check for the financing plan: [[521-48-3907|US_SSN]]. Is that normal? Seems odd.
+
+### sup-027 | support | en | agent-and-customer
+Agent note: called Mrs. [[Okonkwo|PERSON]] back at [[+1 202 555 0147|PHONE]], no answer. Left voicemail. Will retry tomorrow. - [[Tom|PERSON]], Tier 2
+
+### sup-028 | support | en | hard:product-name
+The Aura Mini and the Halo Cam both lost connection after the router swap. Nothing else changed.
+
+### sup-029 | support | en | full-signature
+Kind regards,
+[[Sophie Martin|PERSON]]
+Operations Lead, [[Greenleaf Property Management|ORGANIZATION]]
+[[sophie.martin@greenleaf-pm.com|EMAIL]] | [[+1 617 555 0193|PHONE]]
+[[500 Boylston Street, Suite 1200, Boston, MA 02116|ADDRESS]]
+
+### sup-030 | support | en | card-amex
+Use my Amex for the upgrade: [[3486 252760 18954|CREDIT_CARD]], exp 08/27. Thanks!
