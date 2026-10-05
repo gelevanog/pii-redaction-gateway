@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from "_macros.html" import legend %}
+{% block title %}PII Shield playground{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1>Playground</h1>
+    <p class="muted">Paste text, pick a policy, and see exactly what the LLM receives and what your user gets back.</p>
+  </div>
+  <div class="chips">
+    <span class="chip">upstream: {{ upstream }}</span>
+    <span class="chip {{ 'chip-good' if 'loaded' in ner_status else 'chip-warn' }}">NER: {{ ner_status }}</span>
+  </div>
+</section>
+<div class="panel" style="margin-top:1rem">
+  <form class="play" method="post" action="/playground" hx-post="/playground" hx-target="#result" hx-swap="innerHTML" hx-indicator="#run">
+    <div class="controls">
+      <label>Example
+        <select onchange="if (this.value) document.getElementById('text').value = this.value">
+          <option value="">Pick an example…</option>
+          {% for ex in examples %}<option value="{{ ex.text }}">{{ ex.label }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Policy
+        <select name="policy">{% for p in policies %}<option value="{{ p }}" {{ 'selected' if p == policy }}>{{ p }}</option>{% endfor %}</select>
+      </label>
+      <label>Task
+        <select name="task">{% for key, t in tasks.items() %}<option value="{{ key }}" {{ 'selected' if key == task }}>{{ t.label }}</option>{% endfor %}</select>
+      </label>
+      <label>LLM provider
+        <span class="segmented">
+          {% for p in ['fake', 'real'] %}
+          <label title="{{ 'deterministic offline echo bot' if p == 'fake' else ('configured upstream' if p in providers else 'set OPENROUTER_API_KEY (or a real upstream) to enable') }}">
+            <input type="radio" name="provider" value="{{ p }}" {{ 'checked' if p == provider }} {{ 'disabled' if p not in providers }}> {{ 'Fake (offline)' if p == 'fake' else 'Real model' }}
+          </label>
+          {% endfor %}
+        </span>
+      </label>
+    </div>
+    <textarea id="text" name="text" rows="7" required>{{ text or '' }}</textarea>
+    <button id="run" class="btn" type="submit">Redact → call LLM → restore</button>
+  </form>
+</div>
+<div style="margin-top:0.75rem">{{ legend() }}</div>
+<div id="result">{% if result %}{% include "partials/result.html" %}{% endif %}</div>
+{% endblock %}

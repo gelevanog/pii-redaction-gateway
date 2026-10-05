@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}PII Shield{% endblock %}</title>
+  <style>{% include "_style.css" %}</style>
+  <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="logo">PS</span> PII Shield</a>
+    <nav>
+      <a href="/" class="{{ 'active' if page == 'playground' }}">Playground</a>
+      <a href="/results" class="{{ 'active' if page == 'results' }}">Evaluation</a>
+      <a href="/audit-log" class="{{ 'active' if page == 'audit' }}">Audit log</a>
+      <a href="/docs">API</a>
+    </nav>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+    <footer>PII Shield: strip personal data before it reaches an LLM, and put it back in the answer. Upstream <code>{{ upstream }}</code> · NER {{ ner_status }}.</footer>
+  </main>
+</body>
+</html>

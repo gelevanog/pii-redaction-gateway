@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}PII Shield audit log{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1>Audit log</h1>
+    <p class="muted">What was found and done per request. Counts, types, policy, latency and keyed hashes only: no value ever reaches this log.</p>
+  </div>
+  <div class="chips"><span class="chip">JSON: <a href="/audit">/audit</a></span></div>
+</section>
+<div class="tiles">
+  <div class="tile"><div class="tile-label">Requests</div><div class="tile-value num">{{ summary.requests }}</div><div class="tile-sub">{{ 'in memory, also appended to ' ~ audit_file if audit_file else 'since start, in memory' }}</div></div>
+  <div class="tile"><div class="tile-label">Blocked</div><div class="tile-value num">{{ summary.blocked }}</div><div class="tile-sub">refused by a policy</div></div>
+  <div class="tile"><div class="tile-label">Entities redacted</div><div class="tile-value num">{{ summary.entities.values() | sum }}</div>
+    <div class="tile-sub">{% for k, v in summary.entities.items() %}{% if loop.index <= 3 %}{{ k }} {{ v }}{% if not loop.last and loop.index < 3 %} · {% endif %}{% endif %}{% endfor %}</div></div>
+</div>
+<h2>Recent requests</h2>
+<div class="panel">
+  {% if not records %}<p class="muted">No requests yet. Try the <a href="/">playground</a> or send a chat completion to <code>/v1/chat/completions</code>.</p>{% else %}
+  <table>
+    <thead><tr><th>Time (UTC)</th><th>Route</th><th>Policy</th><th>Entities</th><th>Actions</th><th>Status</th><th class="num">Redact</th><th class="num">Upstream</th><th class="num">Restored</th><th>Request hash</th></tr></thead>
+    <tbody>
+    {% for r in records %}
+      <tr>
+        <td class="small num">{{ r.ts[11:23] }}</td>
+        <td class="small">{{ r.route }}{% if r.stream %} <span class="chip">stream</span>{% endif %}</td>
+        <td><code>{{ r.policy }}</code>{% if r.tenant %}<div class="small muted">{{ r.tenant }}</div>{% endif %}</td>
+        <td class="small">{% for k, v in r.entity_counts.items() %}<span class="nowrap"><span class="dot ent-{{ k }}" style="background: var(--c)"></span>{{ k }} {{ v }}</span>{% if not loop.last %}<br>{% endif %}{% else %}<span class="muted">none</span>{% endfor %}</td>
+        <td class="small muted">{% for k, v in r.action_counts.items() %}<span class="nowrap">{{ k }} {{ v }}</span>{% if not loop.last %}<br>{% endif %}{% endfor %}</td>
+        <td>{% if r.blocked %}<span class="badge badge-none">blocked</span><div class="small muted">{{ r.block_reasons | join(', ') }}</div>{% elif r.status >= 400 %}<span class="badge badge-teacher">{{ r.status }}</span>{% else %}<span class="badge badge-student">{{ r.status }}</span>{% endif %}</td>
+        <td class="num small nowrap">{{ '%.0f' % r.redact_ms }} ms</td>
+        <td class="num small">{% if r.upstream_ms is not none %}{{ '%.0f' % r.upstream_ms }} ms{% else %}–{% endif %}</td>
+        <td class="num small">{{ r.restored }}{% if r.unknown_placeholders %} <span class="diff">+{{ r.unknown_placeholders }}?</span>{% endif %}</td>
+        <td><code class="small">{{ r.request_hash[:12] }}</code></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+{% endblock %}

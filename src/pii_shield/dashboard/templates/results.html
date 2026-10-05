@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% from "_macros.html" import pct %}
+{% block title %}PII Shield evaluation{% endblock %}
+{% block content %}
+{% macro f(v) %}{% if v is none %}–{% else %}{{ '%.2f' % v }}{% endif %}{% endmacro %}
+{% macro bar(v, cls='') %}<div class="cell-bar"><div class="track"><div class="fill {{ cls or 's1' }}" style="width: {{ ((v or 0) * 100)|round(1) }}%"></div></div><span class="value">{{ f(v) }}</span></div>{% endmacro %}
+<section class="hero">
+  <div>
+    <h1>Evaluation on the hand-labeled gold set</h1>
+    <p class="muted">Detection quality per entity type and detector layer, how much PII reaches the LLM provider, and whether answers stay as good.</p>
+  </div>
+  <div class="chips">
+    {% if detection %}<span class="chip">{{ detection.gold.documents }} documents · {{ detection.gold.entities }} entities</span>
+    <span class="chip">run {{ detection.created[:10] }}</span>{% endif %}
+    {% if calls %}<span class="chip {{ 'chip-good' if calls.all_model_ids_free else 'chip-bad' }}">{{ calls.total_requests }} real API calls{{ ', all :free models' if calls.all_model_ids_free }}</span>{% endif %}
+  </div>
+</section>
+
+{% if not detection %}
+<p class="note" style="margin-top:1.5rem">No results in <code>{{ results_dir }}</code> yet. Run <code>pii-shield eval detection --only patterns,patterns+ner</code> and <code>pii-shield eval leak</code> (offline), then reload.</p>
+{% else %}
+{% set cfg = {} %}{% for c in detection.configs %}{% set _ = cfg.update({c.name: c}) %}{% endfor %}
+{% set main = cfg['patterns+ner'] or detection.configs[-1] %}
+<div class="tiles">
+  {% if leak %}{% for r in leak.results if r.policy == 'support-chat' and r.channel == 'user' and r.detectors == main.label %}
+  <div class="tile"><div class="tile-label">PII values reaching the LLM</div><div class="tile-value num">{{ pct(r.leak_rate, 2) }}</div>
+    <div class="tile-sub">{{ r.leaked }} of {{ r.protected_values }} gold values · support-chat · {{ r.detectors }}</div></div>
+  {% endfor %}{% endif %}
+  <div class="tile"><div class="tile-label">Gold PII redacted (any type)</div><div class="tile-value num">{{ pct(main.untyped.recall) }}</div>
+    <div class="tile-sub">{{ main.label }}</div></div>
+  <div class="tile"><div class="tile-label">F1, partial match</div><div class="tile-value num">{{ f(main.partial.overall.f1) }}</div>
+    <div class="tile-sub">strict {{ f(main.strict.overall.f1) }}{% if main.holdout %} · held-out {{ f(main.holdout.partial.overall.f1) }}{% endif %}</div></div>
+  {% if utility %}
+  <div class="tile"><div class="tile-label">Answers as good or better</div><div class="tile-value num">{{ pct(utility.equivalent_or_better, 0) }}</div>
+    <div class="tile-sub">redacted vs original, judged by a second model{% if utility.noise_floor %} · noise floor {{ pct(utility.noise_floor.equivalent_or_better, 0) }}{% endif %}</div></div>
+  <div class="tile"><div class="tile-label">Restore accuracy</div><div class="tile-value num">{{ pct(utility.restore_accuracy, 1) }}</div>
+    <div class="tile-sub">{{ utility.placeholders_total }} placeholders in real answers</div></div>
+  {% endif %}
+</div>
+
+<h2>Detector layers</h2>
+<div class="panel">
+  <table>
+    <thead><tr><th>Configuration</th><th class="num">Precision</th><th class="num">Recall</th><th class="num">F1 strict</th><th class="num">F1 partial</th><th class="num">Any-type recall</th><th class="num">Held-out F1</th><th class="num">False alarms on clean docs</th><th class="num">Latency / doc</th></tr></thead>
+    <tbody>
+    {% for c in detection.configs %}
+      <tr><td><strong>{{ c.label }}</strong>{% if c.models %}<div class="small muted">{% for k, v in c.models.items() %}{{ k }}: <code>{{ v }}</code> {% endfor %}</div>{% endif %}</td>
+        <td class="num">{{ f(c.partial.overall.precision) }}</td><td class="num">{{ f(c.partial.overall.recall) }}</td>
+        <td class="num">{{ f(c.strict.overall.f1) }}</td><td class="num hl">{{ f(c.partial.overall.f1) }}</td>
+        <td class="num">{{ pct(c.untyped.recall) }}</td><td class="num">{{ f(c.holdout.partial.overall.f1) if c.holdout else '–' }}</td>
+        <td class="num">{{ c.negatives_with_findings }}/{{ c.negatives }}</td>
+        <td class="num">{{ '%.0f' % c.latency_ms.mean }} ms <span class="small muted">p95 {{ '%.0f' % c.latency_ms.p95 }}</span></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <p class="small muted" style="margin-top:0.6rem">Precision and recall use partial matching (same type, overlapping span); strict needs exact boundaries. Any-type recall counts a gold value as covered when any detected span overlaps it, whatever the type: that is what decides whether it reaches the LLM. Held-out: {{ main.holdout.documents if main.holdout else 0 }} documents written after the detectors were frozen.</p>
+</div>
+
+<h2>Per entity type</h2>
+<div class="panel">
+  <div class="legend">{% for c in detection.configs %}<span><span class="swatch s{{ loop.index }}"></span>{{ c.label }}</span>{% endfor %}<span>F1, partial match; P / R below</span></div>
+  <table>
+    <thead><tr><th>Entity</th><th class="num">Gold</th>{% for c in detection.configs %}<th>{{ c.label }}</th>{% endfor %}</tr></thead>
+    <tbody>
+    {% for kind, n in detection.gold.by_type.items() %}
+      <tr><td><span class="dot ent-{{ kind }}" style="background: var(--c)"></span>{{ kind }}</td><td class="num">{{ n }}</td>
+      {% for c in detection.configs %}{% set p = c.partial.by_type.get(kind) %}
+        <td>{% if p %}{{ bar(p.f1, 's' ~ loop.index) }}<div class="small muted">P {{ f(p.precision) }} · R {{ f(p.recall) }}</div>{% else %}<span class="muted">–</span>{% endif %}</td>
+      {% endfor %}</tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if detection.llm_subset %}{% set sub = detection.llm_subset %}
+<h2>Adding the LLM detector</h2>
+<div class="panel">
+  <p class="small muted" style="margin-top:0">All three layers on the same subset (every {{ sub.every }}{{ 'rd' if sub.every == 3 else ('nd' if sub.every == 2 else 'th') }} document: {{ sub.documents }} documents, {{ sub.entities }} values), so the free-tier budget could cover the LLM calls.</p>
+  <table>
+    <thead><tr><th>Configuration</th><th class="num">Precision</th><th class="num">Recall</th><th class="num">F1 partial</th><th class="num">Any-type recall</th><th class="num">False alarms on clean docs</th><th class="num">Latency / doc</th><th class="num">Detector errors</th></tr></thead>
+    <tbody>
+    {% for c in sub.configs %}
+      <tr><td><strong>{{ c.label }}</strong>{% if c.models.llm %}<div class="small muted">llm: <code>{{ c.models.llm }}</code></div>{% endif %}</td>
+        <td class="num">{{ f(c.partial.overall.precision) }}</td><td class="num">{{ f(c.partial.overall.recall) }}</td><td class="num hl">{{ f(c.partial.overall.f1) }}</td>
+        <td class="num">{{ pct(c.untyped.recall) }}</td><td class="num">{{ c.negatives_with_findings }}/{{ c.negatives }}</td>
+        <td class="num">{% if c.latency_ms.mean >= 1000 %}{{ '%.1f' % (c.latency_ms.mean / 1000) }} s{% else %}{{ '%.0f' % c.latency_ms.mean }} ms{% endif %}</td>
+        <td class="num">{{ c.detector_errors }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% if detection.ner_models %}
+<h2>NER model choice</h2>
+<div class="panel">
+  <table>
+    <thead><tr><th>Model (with patterns)</th><th class="num">PERSON F1</th><th class="num">ADDRESS F1</th><th class="num">ORGANIZATION F1</th><th class="num">Overall F1</th><th class="num">NER ms / doc</th><th class="num">Load</th></tr></thead>
+    <tbody>
+    {% for row in detection.ner_models %}
+      <tr><td><code>{{ row.model }}</code>{% if row.model == main.models.get('ner') %} <span class="chip chip-good">used</span>{% endif %}</td>
+      {% if row.error %}<td colspan="6" class="muted small">could not load: {{ row.error }}</td>{% else %}
+        {% for t in ['PERSON', 'ADDRESS', 'ORGANIZATION'] %}<td class="num">{{ f(row.by_type[t].f1 if row.by_type[t] else none) }}</td>{% endfor %}
+        <td class="num hl">{{ f(row.partial_f1) }}</td><td class="num">{{ '%.0f' % (row.ner_ms_mean or 0) }}</td><td class="num">{{ row.load_seconds }} s</td>
+      {% endif %}</tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endif %}
+
+{% if leak %}
+<h2>Leak test</h2>
+<div class="panel">
+  <p class="small muted" style="margin-top:0">Every gold document sent through the gateway (as a user message and as a tool result) to a recording upstream; a value leaks when it appears in what the upstream received. Only entity types the policy protects are counted.</p>
+  <table>
+    <thead><tr><th>Policy</th><th>Detectors</th><th>Channel</th><th class="num">Protected values</th><th class="num">Leaked</th><th>Leak rate</th><th class="num">Partial name leaks</th><th class="num">Blocked requests</th></tr></thead>
+    <tbody>
+    {% for r in leak.results %}
+      <tr><td><code>{{ r.policy }}</code></td><td>{{ r.detectors }}</td><td class="small">{{ r.channel }}</td><td class="num">{{ r.protected_values }}</td><td class="num">{{ r.leaked }}</td>
+        <td><div class="cell-bar"><div class="track"><div class="fill s2" style="width: {{ (r.leak_rate * 100)|round(1) }}%"></div></div><span class="value">{{ pct(r.leak_rate, 1) }}</span></div></td>
+        <td class="num">{{ r.leaked_partial_names }}</td><td class="num">{{ r.blocked_requests }}/{{ r.requests }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% for r in leak.results if r.policy == 'support-chat' and r.channel == 'user' and r.detectors == main.label and r.examples %}
+  <details style="margin-top:0.6rem"><summary class="small muted">What leaked ({{ r.examples | length }})</summary>
+    <table><tbody>{% for e in r.examples %}<tr><td class="small">{{ e.doc }}</td><td>{{ e.type }}{% if e.partial %} <span class="chip">partial</span>{% endif %}</td><td><code>{{ e.value }}</code></td></tr>{% endfor %}</tbody></table>
+  </details>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if utility %}
+<h2>Utility with real models</h2>
+<div class="two-col">
+  <div class="panel">
+    <h3>Redacted pipeline vs original text</h3>
+    {% set total = utility.verdicts.values() | sum %}
+    <div style="display:flex;height:22px;border-radius:6px;overflow:hidden;margin:0.4rem 0 0.6rem">
+      {% for key, cls in [('better', 'var(--series-3)'), ('equivalent', 'var(--series-1)'), ('worse', 'var(--series-2)'), ('error', 'var(--grid)')] %}
+        {% if utility.verdicts[key] %}<div title="{{ key }}: {{ utility.verdicts[key] }}" style="width: {{ (utility.verdicts[key] / total * 100)|round(1) }}%; background: {{ cls }}"></div>{% endif %}
+      {% endfor %}
+    </div>
+    <div class="legend"><span><span class="swatch s3"></span>better {{ utility.verdicts.better }}</span><span><span class="swatch s1"></span>equivalent {{ utility.verdicts.equivalent }}</span><span><span class="swatch s2"></span>worse {{ utility.verdicts.worse }}</span>{% if utility.verdicts.error %}<span>errors {{ utility.verdicts.error }}</span>{% endif %}</div>
+    <table class="kv">
+      <tr><td>Task</td><td>{{ utility.task }} · policy <code>{{ utility.policy }}</code> · {{ utility.documents }} documents</td></tr>
+      <tr><td>Answer model</td><td><code>{{ utility.model }}</code></td></tr>
+      <tr><td>Judge</td><td><code>{{ utility.judge_model }}</code> (blind, order randomized)</td></tr>
+    </table>
+  </div>
+  <div class="panel">
+    <h3>Restore</h3>
+    <table class="kv">
+      <tr><td>Restore accuracy</td><td class="hl">{{ pct(utility.restore_accuracy) }} <span class="small muted">{{ utility.placeholders_total - utility.unknown_placeholders }} of {{ utility.placeholders_total }} placeholders resolved</span></td></tr>
+      <tr><td>Left in answers</td><td>{{ utility.leftover_placeholders }} placeholder(s)</td></tr>
+      <tr><td>Name fidelity</td><td>{{ pct(utility.name_fidelity) }} <span class="small muted">of {{ utility.name_fidelity_docs }} answers where the baseline used the customer's name</span></td></tr>
+      <tr><td>Gold PII sent upstream</td><td>{{ utility.leaked_values }}</td></tr>
+      {% if utility.noise_floor %}<tr><td>Noise floor</td><td>{{ pct(utility.noise_floor.equivalent_or_better, 0) }} <span class="small muted">as good or better when the judge compares two samples of the original-text answer ({{ utility.noise_floor.verdicts.worse }} of {{ utility.noise_floor.documents }} "worse" with no redaction at all)</span></td></tr>{% endif %}
+    </table>
+  </div>
+</div>
+<div class="panel" style="margin-top:1rem">
+  <h3>Examples</h3>
+  {% for item in utility['items'][:6] if not item.error %}
+  <details {{ 'open' if loop.first }} style="margin-bottom:0.6rem"><summary><strong>{{ item.doc }}</strong> · <span class="badge {{ 'badge-student' if item.verdict != 'worse' else 'badge-teacher' }}">{{ item.verdict }}</span> <span class="small muted">{{ item.judge_reason }}</span></summary>
+    <div class="result-grid">
+      <div><div class="small muted">Model saw placeholders and answered</div><pre>{{ item.raw_redacted }}</pre></div>
+      <div><div class="small muted">Restored for the user</div><pre>{{ item.restored }}</pre></div>
+    </div>
+  </details>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

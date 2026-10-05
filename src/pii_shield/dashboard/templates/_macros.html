@@ -1,0 +1,12 @@
+{% macro segments(items) -%}
+{%- for s in items -%}{%- if s.type -%}<span class="ent ent-{{ s.type }}" title="{{ s.title }}">{{ s.text }}</span>{%- else -%}{{ s.text }}{%- endif -%}{%- endfor -%}
+{%- endmacro %}
+{% macro legend() %}
+<div class="legend-ent">
+  <span><i class="dot ent-PERSON"></i>Person</span><span><i class="dot ent-ADDRESS"></i>Address</span>
+  <span><i class="dot ent-ORGANIZATION"></i>Organization</span><span><i class="dot ent-EMAIL"></i>Contact (email, phone, URL, IP)</span>
+  <span><i class="dot ent-IBAN"></i>Payment</span><span><i class="dot ent-NATIONAL_ID"></i>ID, SSN, birth date</span>
+  <span><i class="dot ent-SECRET"></i>Secret</span><span><i class="dot ent-CUSTOM"></i>Deny-list</span>
+</div>
+{% endmacro %}
+{% macro pct(value, digits=1) %}{% if value is none %}–{% else %}{{ ('%.' ~ digits ~ 'f') | format(value * 100) }}%{% endif %}{% endmacro %}

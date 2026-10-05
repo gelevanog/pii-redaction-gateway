@@ -1,0 +1,44 @@
+{% from "_macros.html" import segments %}
+{% set r = result %}
+{% if r.blocked %}
+<div class="blocked"><strong>Request refused by policy <code>{{ r.policy }}</code>.</strong> It contains {{ r.block_reasons | join(', ') }}. Nothing was sent to the LLM.</div>
+{% endif %}
+{% if r.error %}<div class="blocked"><strong>Upstream error.</strong> {{ r.error }}</div>{% endif %}
+<p class="flow"><b>{{ r.entities | length }}</b> entities · redaction <b>{{ '%.0f' % r.redact_ms }} ms</b>
+  {% if r.llm_ms is not none %} · LLM <b>{{ '%.0f' % r.llm_ms }} ms</b> ({{ r.model }}){% endif %}
+  {% if r.restored_count %} · <b>{{ r.restored_count }}</b> values restored{% endif %}
+  {% if r.unknown %} · <span class="diff">{{ r.unknown | length }} unknown placeholder(s)</span>{% endif %}
+  {% for name, err in r.detector_errors.items() %} · <span class="diff">{{ name }} failed</span>{% endfor %}
+</p>
+<div class="panel-grid">
+  <div class="panel">
+    <div class="panel-head"><h3><span class="step">1</span>Original, with detected entities</h3><span class="small muted">hover for type · score · detector</span></div>
+    <div class="textbox">{{ segments(r.original) }}</div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3><span class="step">2</span>Sent to the LLM</h3><span class="small muted">policy {{ r.policy }}</span></div>
+    <div class="textbox">{{ segments(r.sent) }}</div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3><span class="step">3</span>LLM answer, as received</h3><span class="small muted">{{ r.provider }}{% if r.model %} · {{ r.model }}{% endif %}</span></div>
+    <div class="textbox">{% if r.raw_answer %}{{ segments(r.raw_answer) }}{% else %}<span class="muted">{{ 'Not sent.' if r.blocked else 'No answer.' }}</span>{% endif %}</div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3><span class="step">4</span>Restored answer, shown to your user</h3><span class="small muted">from the session vault</span></div>
+    <div class="textbox">{% if r.restored %}{{ segments(r.restored) }}{% else %}<span class="muted">–</span>{% endif %}</div>
+  </div>
+</div>
+{% if r.entities %}
+<div class="panel" style="margin-top:1rem">
+  <h3>Entities</h3>
+  <table>
+    <thead><tr><th>Type</th><th>Value</th><th class="num">Score</th><th>Detector</th><th>Action</th><th>Replacement</th></tr></thead>
+    <tbody>
+    {% for e in r.entities %}
+      <tr><td><span class="dot ent-{{ e.type }}" style="background: var(--c)"></span>{{ e.type }}</td><td><code>{{ e.text }}</code></td>
+        <td class="num">{{ '%.2f' % e.score }}</td><td class="small muted">{{ e.source }}</td><td>{{ e.action }}</td><td><code>{{ e.replacement }}</code></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
