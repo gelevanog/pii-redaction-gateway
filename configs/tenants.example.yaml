@@ -1,0 +1,11 @@
+# Gateway tenants: clients authenticate with `Authorization: Bearer <key>`; only the SHA-256 of each key is
+# stored here. Generate one with:  python -c "import hashlib,secrets; k=secrets.token_urlsafe(32); print(k, hashlib.sha256(k.encode()).hexdigest())"
+# The key a client sends to the gateway is never forwarded upstream; the gateway uses its own provider key.
+tenants:
+  - name: helpdesk
+    api_key_sha256: 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945   # example only
+    policy: support-chat
+    allowed_policies: [natural-text]
+  - name: finance-backoffice
+    api_key_sha256: 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92   # example only
+    policy: strict-finance

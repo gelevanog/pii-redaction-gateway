@@ -1,0 +1,42 @@
+# docker compose up --build  ->  http://localhost:8000  (playground at /, evaluation at /results, API docs at /docs)
+# Gateway + Redis vault. Upstream defaults to the offline fake echo model, so no API keys are needed.
+# The NER model is downloaded on first start into the hf-cache volume (a few minutes once; see README > Docker).
+services:
+  gateway:
+    build:
+      context: .
+      args:
+        EXTRAS: ${EXTRAS:-ner}
+        BAKE_NER_MODEL: ${BAKE_NER_MODEL:-false}
+    image: pii-shield:latest
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      PII_SHIELD_VAULT_BACKEND: redis
+      PII_SHIELD_REDIS_URL: redis://redis:6379/0
+      PII_SHIELD_UPSTREAM_PROVIDER: ${PII_SHIELD_UPSTREAM_PROVIDER:-fake}
+      PII_SHIELD_AUDIT_FILE: /home/app/audit/audit.jsonl
+    volumes:
+      - hf-cache:/home/app/.cache/huggingface
+      - audit:/home/app/audit
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  redis:
+    image: redis:8-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]  # sessions are short-lived: no disk persistence
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  hf-cache:
+  audit:
