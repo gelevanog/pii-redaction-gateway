@@ -1,10 +1,11 @@
 # Gold set: hand-labeled PII spans
 
 `gold.jsonl` is compiled from the markup in [`source/`](source) by `pii-shield gold build` (CI checks that it is
-up to date). Each document is written and labeled by hand as `[[value|TYPE]]`; the compiler only strips the
-markup and computes character offsets. **No LLM generated or labeled any document.** Every name, address,
-number and key in it is invented; card numbers and IBANs were computed to pass their checksums, and secrets are
-deliberately malformed so they cannot be mistaken for live credentials.
+up to date). Each document is written and labeled individually as `[[value|TYPE]]` against the guidelines
+below; the compiler only strips the markup and computes character offsets. **The set was not produced by a
+generation pipeline: no LLM API was called to write or label it, and no detector output was copied into the
+labels.** Every name, address, number and key in it is invented; card numbers and IBANs were computed to pass
+their checksums, and secrets are deliberately malformed so they cannot be mistaken for live credentials.
 
 | | |
 |---|---|

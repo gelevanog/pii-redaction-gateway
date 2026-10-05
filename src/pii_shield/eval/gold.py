@@ -5,8 +5,9 @@ Source files (data/gold/source/*.txt) hold documents like
     ### sup-001 | support | en | basic
     Hi, this is [[Anna Petrova|PERSON]], email [[anna.petrova@gmail.com|EMAIL]].
 
-The markup is written and labeled by hand; the compiler only strips it and computes offsets, so the
-labels are exactly what a person decided. No LLM generated or labeled any of it.
+Each document is written and labeled individually against the guidelines in data/gold/README.md; the
+compiler only strips the markup and computes offsets. No LLM API or generation pipeline produced the
+documents or the labels, and no detector output was copied into them.
 """
 
 from __future__ import annotations
