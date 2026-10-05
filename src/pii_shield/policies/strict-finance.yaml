@@ -1,0 +1,22 @@
+# Banking / fintech back office. Lower thresholds (recall over precision), every organization is
+# redacted too, and the request is refused outright if it contains a card number, an SSN or a secret:
+# those must not be pasted into an LLM tool at all, even redacted.
+name: strict-finance
+description: Fail-closed finance policy. Blocks cards, SSNs and secrets; lower thresholds; everything else pseudonymized.
+default_action: pseudonymize
+min_score: 0.4
+entities:
+  PERSON: {action: pseudonymize, threshold: 0.4}
+  ADDRESS: {action: pseudonymize, threshold: 0.4}
+  ORGANIZATION: {action: pseudonymize, threshold: 0.4}
+  PHONE: {action: pseudonymize, threshold: 0.3}
+  CREDIT_CARD: {action: block}
+  US_SSN: {action: block}
+  SECRET: {action: block}
+  IBAN: {action: pseudonymize}
+allow_list:
+  - Brightloop
+deny_list: []
+detectors: {patterns: true, ner: true, llm: false}
+link_name_variants: true
+fail_closed: true

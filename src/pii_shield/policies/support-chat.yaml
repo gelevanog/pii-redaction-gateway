@@ -1,0 +1,34 @@
+# Customer-support assistant (drafting replies, summarizing tickets).
+# Names and contact details become reversible placeholders, so the drafted reply greets the customer by
+# their real name after restore. Payment data is masked (the last 4 digits are enough to talk about a
+# card), and pasted passwords or API keys are masked rather than blocking the conversation.
+name: support-chat
+description: Support tickets and chat. Reversible placeholders for people and contact data, masked payment data and secrets.
+default_action: pseudonymize
+min_score: 0.5
+entities:
+  PERSON: {action: pseudonymize, threshold: 0.5}
+  ADDRESS: {action: pseudonymize, threshold: 0.5}
+  ORGANIZATION: {action: pseudonymize, threshold: 0.6}
+  EMAIL: {action: pseudonymize}
+  PHONE: {action: pseudonymize, threshold: 0.6}
+  CREDIT_CARD: {action: mask, keep_last: 4}
+  IBAN: {action: mask, keep_last: 4}
+  SECRET: {action: mask}
+  US_SSN: {action: pseudonymize}
+  NATIONAL_ID: {action: pseudonymize}
+  DATE_OF_BIRTH: {action: pseudonymize}
+  IP_ADDRESS: {action: pseudonymize}
+  URL: {action: pseudonymize}
+allow_list:
+  # The operator's own brand, products and public contact points are not personal data.
+  - {pattern: "Brightloop(?:\\.com| Inc\\.?| Care)?", entity: ORGANIZATION}
+  - {pattern: "(?:Brightloop )?(?:Aura|Halo|Glow)(?: Mini| Cam)?(?: \\d)?", entity: ORGANIZATION}
+  - {pattern: "[a-z0-9._%+-]+@brightloop\\.com", entity: EMAIL}
+  - {value: "+1 800 555 0199", entity: PHONE}
+deny_list:
+  # Internal code names that must never leave the company, whatever the detectors think.
+  - {value: "Project Falcon", entity: CUSTOM}
+detectors: {patterns: true, ner: true, llm: false}
+link_name_variants: true
+fail_closed: true

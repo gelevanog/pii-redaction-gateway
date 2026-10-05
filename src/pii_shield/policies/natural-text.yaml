@@ -1,0 +1,18 @@
+# For prompts where placeholders hurt quality (creative writing, tone rewriting): realistic synthetic
+# stand-ins from Faker, consistent per conversation and reversed in the answer through the vault.
+# Restoring synthetic values relies on the model copying them verbatim, so it is less robust than
+# placeholders; see README > Key design decisions.
+name: natural-text
+description: Realistic synthetic stand-ins (reversible) so the LLM sees natural text.
+default_action: synthetic
+min_score: 0.5
+entities:
+  ORGANIZATION: {action: synthetic, threshold: 0.6}
+  CREDIT_CARD: {action: mask, keep_last: 4}
+  SECRET: {action: mask}
+allow_list:
+  - Brightloop
+  - {pattern: "[a-z0-9._%+-]+@brightloop\\.com", entity: EMAIL}
+detectors: {patterns: true, ner: true, llm: false}
+link_name_variants: true
+fail_closed: true

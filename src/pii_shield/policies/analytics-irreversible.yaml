@@ -1,0 +1,24 @@
+# Analytics and model-training exports. Nothing is ever restored: identifiers become keyed hashes, so
+# the same customer still joins across records (<EMAIL:3f2a9c1b> is always the same email) without any
+# way back to the value; free-text identifiers are masked.
+name: analytics-irreversible
+description: One-way. Keyed hashes for identifiers (joinable, not reversible), masks for the rest.
+default_action: mask
+min_score: 0.5
+entities:
+  PERSON: {action: hash}
+  EMAIL: {action: hash}
+  PHONE: {action: hash}
+  US_SSN: {action: hash}
+  NATIONAL_ID: {action: hash}
+  IBAN: {action: hash}
+  CREDIT_CARD: {action: mask, keep_last: 4}
+  ADDRESS: {action: mask}
+  ORGANIZATION: {action: keep}
+  DATE_OF_BIRTH: {action: mask}
+  SECRET: {action: mask}
+allow_list:
+  - Brightloop
+detectors: {patterns: true, ner: true, llm: false}
+link_name_variants: false
+fail_closed: true
