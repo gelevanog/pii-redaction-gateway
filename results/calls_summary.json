@@ -1,0 +1,22 @@
+{
+ "total_requests": 275,
+ "by_status": {
+  "ok": 264,
+  "retryable_error": 5,
+  "error": 6
+ },
+ "by_tag": {
+  "smoke": 4,
+  "utility_model": 119,
+  "utility_judge": 82,
+  "llm_detector": 68,
+  "playground": 2
+ },
+ "served_models": {
+  "nvidia/nemotron-3-super-120b-a12b:free": 185,
+  "dots-studio/dots-3-note-preview:free": 79
+ },
+ "all_model_ids_free": true,
+ "input_tokens": 68661,
+ "output_tokens": 149597
+}
