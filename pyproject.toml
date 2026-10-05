@@ -1,0 +1,82 @@
+[project]
+name = "pii-shield"
+version = "0.1.0"
+description = "PII Shield: strip personal data before it reaches an LLM, and put it back in the answer. A Python library and an OpenAI-compatible gateway."
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Ivan Savchenko" }]
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=1.0",
+    "cryptography",
+    "faker",
+    "fastapi",
+    "httpx",
+    "jinja2",
+    "phonenumbers",
+    "pydantic",
+    "pydantic-settings",
+    "python-multipart",
+    "pyyaml",
+    "redis",
+    "rich",
+    "structlog",
+    "typer",
+    "uvicorn[standard]",
+]
+
+[project.optional-dependencies]
+# NER for names, addresses and organizations (GLiNER on CPU torch, see [tool.uv.sources]).
+ner = ["gliner", "protobuf", "torch"]  # protobuf: slow-tokenizer conversion for mdeberta-based GLiNER models
+
+[dependency-groups]
+dev = ["fakeredis", "hypothesis", "lupa", "mypy", "openai", "pytest", "pytest-asyncio", "ruff", "types-pyyaml"]
+
+[project.scripts]
+pii-shield = "pii_shield.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pii_shield"]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = ["ner: needs the `ner` extra and a cached GLiNER model (skipped otherwise)"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "SIM", "RUF", "ASYNC", "PTH", "N", "C4", "PIE", "RET", "TC"]
+ignore = ["TC001", "TC002", "TC003", "RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Form", "fastapi.Header", "fastapi.Depends", "typer.Option", "typer.Argument"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+mypy_path = "src"
+packages = ["pii_shield"]
+
+[[tool.mypy.overrides]]
+module = ["gliner.*", "torch.*", "huggingface_hub.*", "faker.*", "fakeredis.*"]  # untyped, or only in the optional `ner` extra
+ignore_missing_imports = true
+follow_imports = "skip"
