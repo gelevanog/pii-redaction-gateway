@@ -10,7 +10,7 @@
 ![mypy strict](https://img.shields.io/badge/mypy-strict-2a6db2)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green)
 
-https://github.com/user-attachments/assets/17564812-963f-4d83-8969-d8104bc5e39a
+https://github.com/user-attachments/assets/14e8b53d-07ca-41d6-bf90-a4933c5c83f3
 
 <sub>60-second walkthrough with voiceover. Can't play it? [Download the MP4](docs/demo.mp4).</sub>
 
