@@ -12,7 +12,7 @@
 
 https://github.com/user-attachments/assets/17564812-963f-4d83-8969-d8104bc5e39a
 
-<sub>58-second walkthrough with voiceover. Can't play it? [Download the MP4](docs/demo.mp4).</sub>
+<sub>60-second walkthrough with voiceover. Can't play it? [Download the MP4](docs/demo.mp4).</sub>
 
 ![Playground: original text with detected entities, what the LLM receives, the raw answer with placeholders, and the restored answer](docs/screenshots/playground.png)
 
