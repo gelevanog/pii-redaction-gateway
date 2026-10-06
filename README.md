@@ -10,9 +10,9 @@
 ![mypy strict](https://img.shields.io/badge/mypy-strict-2a6db2)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green)
 
-[![Watch the 58-second demo with voiceover](docs/video-cover.jpg)](docs/demo.mp4)
+https://github.com/user-attachments/assets/17564812-963f-4d83-8969-d8104bc5e39a
 
-<sub>▶ Click the cover to watch the 58-second walkthrough with voiceover (MP4, 8.6 MB).</sub>
+<sub>58-second walkthrough with voiceover. Can't play it? [Download the MP4](docs/demo.mp4).</sub>
 
 ![Playground: original text with detected entities, what the LLM receives, the raw answer with placeholders, and the restored answer](docs/screenshots/playground.png)
 
