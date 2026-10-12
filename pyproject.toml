@@ -35,6 +35,7 @@ dev = ["fakeredis", "hypothesis", "lupa", "mypy", "openai", "pytest", "pytest-as
 
 [project.scripts]
 pii-shield = "pii_shield.cli:app"
+pii-shield-prompt-hook = "pii_shield.claude_hook:main"
 
 [build-system]
 requires = ["hatchling"]
