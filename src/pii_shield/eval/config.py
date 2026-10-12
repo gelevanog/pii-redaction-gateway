@@ -28,6 +28,8 @@ class LlmModelConfig(BaseModel):
     provider: ProviderKind = "openrouter"
     model: str = DEFAULT_FREE_MODEL
     fallback_models: list[str] = Field(default_factory=lambda: list(DEFAULT_FREE_FALLBACKS))
+    base_url: str | None = None
+    """OpenAI-compatible endpoint for this role (provider `openai`/`openrouter`); default: the settings' URL."""
 
     @property
     def all_models(self) -> list[str]:
@@ -96,6 +98,16 @@ class EvalConfig(BaseModel):
             if config.name == name:
                 return config
         raise KeyError(f"unknown detector config {name!r}")
+
+
+def check_paid_opt_in(config: EvalConfig, allow_paid_models: bool) -> None:
+    """Paid models need two explicit switches: `require_free_models: false` in the eval config and
+    PII_SHIELD_ALLOW_PAID_MODELS=1 in the environment. A default config never gets this far with a paid id."""
+    if not config.require_free_models and not allow_paid_models:
+        raise ValueError(
+            "this eval config turns the free-only guard off (require_free_models: false); "
+            "set PII_SHIELD_ALLOW_PAID_MODELS=1 to confirm that paid models may be called"
+        )
 
 
 def load_eval_config(path: Path | str) -> EvalConfig:

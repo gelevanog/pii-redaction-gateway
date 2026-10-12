@@ -19,7 +19,7 @@ from pii_shield.config import Settings
 from pii_shield.detect.llm import LlmDetector
 from pii_shield.detect.ner import GlinerDetector
 from pii_shield.detect.pipeline import DetectionPipeline
-from pii_shield.eval.config import DetectorConfig, EvalConfig, LlmModelConfig
+from pii_shield.eval.config import DetectorConfig, EvalConfig, LlmModelConfig, check_paid_opt_in
 from pii_shield.eval.detection import ConfigResult, DetectionReport, SubsetReport, evaluate_config, new_report
 from pii_shield.eval.gold import GoldDoc, load_gold
 from pii_shield.eval.leak import LeakResult, run_leak_test
@@ -34,6 +34,7 @@ log = get_logger(__name__)
 
 class EvalRunner:
     def __init__(self, config: EvalConfig, settings: Settings) -> None:
+        check_paid_opt_in(config, settings.allow_paid_models)
         self.config = config
         self.settings = settings.model_copy(
             update={
@@ -61,7 +62,13 @@ class EvalRunner:
     def llm(self, llm: LlmModelConfig, tag: str) -> ResilientProvider:
         if self._ledger is None:
             self._ledger = CallLedger(self.out / "calls.jsonl", self.config.max_calls)
-        inner = build_provider(self.settings, kind=llm.provider, model=llm.model, fallback_models=llm.fallback_models)
+        inner = build_provider(
+            self.settings,
+            kind=llm.provider,
+            model=llm.model,
+            fallback_models=llm.fallback_models,
+            base_url=llm.base_url,
+        )
         return ResilientProvider(
             inner,
             ledger=self._ledger,

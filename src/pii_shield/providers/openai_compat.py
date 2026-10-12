@@ -132,6 +132,16 @@ class OpenAICompatibleProvider:
                 yield chunk
 
 
+QUOTA_ERRORS = {"insufficient_quota", "budget_exhausted"}
+
+
+def _error_kinds(data: JsonDict) -> set[str]:
+    error = data.get("error")
+    if not isinstance(error, dict):
+        return set()
+    return {str(error.get("type")), str(error.get("code"))}
+
+
 def _error_message(data: JsonDict) -> str:
     error: Any = data.get("error", data)
     if isinstance(error, dict):
@@ -157,6 +167,9 @@ def _json_or_error(response: httpx.Response) -> JsonDict:
     if status < 400:
         return data
     message = _error_message(data)
+    if status == 429 and _error_kinds(data) & QUOTA_ERRORS:
+        # A spent quota or budget does not come back after a backoff: fail at once instead of retrying.
+        raise ProviderError(f"quota exhausted: {message}", 429)
     if status == 429:
         retry_after = response.headers.get("retry-after")
         try:

@@ -38,6 +38,9 @@ class Settings(BaseSettings):
     upstream_fallback_models: Annotated[list[str], NoDecode] = Field(default_factory=list)
     require_free_models: bool = True
     """Refuse any OpenRouter model id that does not end in ":free" (requests and served models)."""
+    allow_paid_models: bool = False
+    """Explicit opt-in for evaluation runs on paid models: an eval config with `require_free_models: false`
+    is refused unless this is set too (PII_SHIELD_ALLOW_PAID_MODELS=1)."""
     upstream_timeout_seconds: float = 120.0
 
     openrouter_api_key: str | None = Field(default=None, validation_alias=AliasChoices("OPENROUTER_API_KEY"))

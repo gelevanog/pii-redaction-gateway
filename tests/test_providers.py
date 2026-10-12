@@ -8,7 +8,8 @@ from typing import Any
 import httpx
 import pytest
 
-from pii_shield.eval.config import EvalConfig, LlmModelConfig
+from pii_shield.config import Settings
+from pii_shield.eval.config import EvalConfig, LlmModelConfig, UtilityConfig, check_paid_opt_in
 from pii_shield.providers.anthropic_provider import from_anthropic_message, to_anthropic_request
 from pii_shield.providers.base import (
     BudgetExceededError,
@@ -17,6 +18,7 @@ from pii_shield.providers.base import (
     RetryableError,
     ensure_free_models,
 )
+from pii_shield.providers.factory import build_provider
 from pii_shield.providers.fake import FakeProvider
 from pii_shield.providers.openai_compat import OpenAICompatibleProvider
 from pii_shield.providers.resilient import CallLedger, DiskCache, ResilientProvider
@@ -75,6 +77,50 @@ def test_eval_config_rejects_paid_models() -> None:
         EvalConfig(llm_detector=LlmModelConfig(provider="anthropic", model="claude-sonnet-5", fallback_models=[]))
 
 
+def test_default_settings_do_not_allow_paid_models(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("PII_SHIELD_ALLOW_PAID_MODELS", raising=False)
+    settings = Settings(_env_file=None)  # type: ignore[call-arg]
+    assert settings.require_free_models and not settings.allow_paid_models
+    default = EvalConfig()
+    check_paid_opt_in(default, settings.allow_paid_models)  # free default config: nothing to opt into
+    with pytest.raises(FreeModelGuardError):
+        build_provider(
+            settings.model_copy(update={"openrouter_api_key": "k"}), kind="openrouter", model="anthropic/claude-x"
+        )
+
+
+def test_paid_eval_config_needs_the_explicit_opt_in() -> None:
+    paid = LlmModelConfig(
+        provider="openai", model="claude-haiku-5-5", fallback_models=[], base_url="http://127.0.0.1:8787/v1"
+    )
+    config = EvalConfig(require_free_models=False, llm_detector=paid, utility=UtilityConfig(model=paid, judge=paid))
+    with pytest.raises(ValueError, match="PII_SHIELD_ALLOW_PAID_MODELS"):
+        check_paid_opt_in(config, allow_paid_models=False)
+    check_paid_opt_in(config, allow_paid_models=True)
+    with pytest.raises(ValueError, match="always paid"):  # the opt-in never weakens a free-only config
+        EvalConfig(llm_detector=paid)
+
+
+def test_opt_in_from_environment(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("PII_SHIELD_ALLOW_PAID_MODELS", "1")
+    assert Settings(_env_file=None).allow_paid_models  # type: ignore[call-arg]
+
+
+async def test_per_role_base_url_overrides_settings() -> None:
+    seen: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(str(request.url))
+        return httpx.Response(200, json=completion(model="claude-haiku-5-5"))
+
+    settings = Settings(_env_file=None, openai_api_key="proj-x")  # type: ignore[call-arg]
+    provider = build_provider(settings, kind="openai", model="claude-haiku-5-5", base_url="http://proxy.test/v1")
+    assert isinstance(provider, OpenAICompatibleProvider)
+    provider._transport = httpx.MockTransport(handler)
+    answer = await provider.complete({"messages": [{"role": "user", "content": "x"}]})
+    assert seen == ["http://proxy.test/v1/chat/completions"] and answer["model"] == "claude-haiku-5-5"
+
+
 async def test_served_paid_model_is_refused() -> None:
     provider = openrouter(lambda r: httpx.Response(200, json=completion(model="openai/gpt-5.4")))
     with pytest.raises(FreeModelGuardError):
@@ -105,6 +151,8 @@ async def test_request_shape_and_auth_header() -> None:
         ),
         (httpx.Response(200, json={"error": {"message": "upstream overloaded", "code": 502}}), RetryableError),
         (httpx.Response(401, json={"error": {"message": "bad key"}}), ProviderError),
+        (httpx.Response(429, json={"error": {"message": "spent", "type": "budget_exhausted"}}), ProviderError),
+        (httpx.Response(429, json={"error": {"message": "quota", "code": "insufficient_quota"}}), ProviderError),
         (httpx.Response(200, json=completion(content="", finish="length")), ProviderError),
         (httpx.Response(200, json=completion(content="", finish="stop")), RetryableError),
     ],
@@ -112,7 +160,7 @@ async def test_request_shape_and_auth_header() -> None:
 async def test_error_mapping(response: httpx.Response, error: type[Exception]) -> None:
     with pytest.raises(error) as excinfo:
         await openrouter(lambda r: response).complete({"messages": [{"role": "user", "content": "x"}]})
-    if response.status_code == 429:
+    if response.status_code == 429 and error is RetryableError:
         assert isinstance(excinfo.value, RetryableError) and excinfo.value.retry_after == 7.0
     if error is ProviderError:
         assert not isinstance(excinfo.value, RetryableError)
