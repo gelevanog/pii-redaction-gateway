@@ -113,7 +113,7 @@ async def test_per_role_base_url_overrides_settings() -> None:
         seen.append(str(request.url))
         return httpx.Response(200, json=completion(model="claude-haiku-5-5"))
 
-    settings = Settings(_env_file=None, openai_api_key="proj-x")  # type: ignore[call-arg]
+    settings = Settings(_env_file=None, openai_api_key="test-key")  # type: ignore[call-arg]
     provider = build_provider(settings, kind="openai", model="claude-haiku-5-5", base_url="http://proxy.test/v1")
     assert isinstance(provider, OpenAICompatibleProvider)
     provider._transport = httpx.MockTransport(handler)
