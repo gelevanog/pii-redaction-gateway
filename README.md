@@ -54,6 +54,7 @@ It helps with data minimization and with keeping personal data inside your infra
 - **Session vault**: placeholder ↔ original per conversation, **AES-256-GCM encrypted at rest** with the session id bound as associated data, with a TTL; in-memory, Redis (several replicas) or file (CLI) backend; per-session locking.
 - **Audit log without PII**: entity counts by type and action, policy, latencies, upstream model, keyed hashes of the request and session. `GET /audit` and a [dashboard page](docs/screenshots/audit-log.png). Logs never contain values (a structlog processor drops text-carrying keys as a last line of defence).
 - **Providers**: `fake` (deterministic offline echo bot, so tests, CI and the Docker demo need no keys), OpenRouter (with a `models` fallback list), OpenAI, Anthropic (official SDK, OpenAI ↔ Messages conversion including tool calls and streaming). The OpenRouter path ran against the live API for the main results; the OpenAI-compatible path ran against a budget proxy for the [model comparison](#model-comparison); the Anthropic SDK path is unit-tested (request shapes, conversion, error mapping) but was not run against the live API here. A **free-only guard** refuses any OpenRouter model id that does not end in `:free`, also checking the model that actually answered.
+- **Claude Code and Claude Desktop**: an MCP server (`detect_pii`, `redact`, `redact_file`, `list_policies`, opt-in `restore`) and a `UserPromptSubmit` hook that blocks or flags prompts with personal data before Claude sees them. See [Use with Claude Code and Claude Desktop](#use-with-claude-code-and-claude-desktop).
 - **Dashboard** (Jinja2 + htmx, no build step): the four-panel playground with a fake/real model toggle, the evaluation results and the audit log.
 - **Evaluation you can rerun**: hand-labeled gold set, P/R/F1 per entity type and detector layer (strict, partial, any-type), a leak test through the real gateway, a real-model utility test with an LLM judge and its noise floor, property-based round-trip tests.
 
@@ -368,7 +369,7 @@ Full tables, call ledgers, costs, incidents (intermittent proxy 403s, a discarde
 uv sync --all-extras                 # Python 3.12; the `ner` extra pulls CPU-only torch + GLiNER
 uv run pii-shield download-model     # GLiNER PII base, PyTorch weights only (~660 MB, once)
 make serve                           # gateway + dashboard on http://localhost:8000, fake upstream
-make test                            # 195 tests, no keys, no downloads in CI
+make test                            # 230 tests, no keys, no downloads in CI
 make eval-offline                    # detection (patterns, patterns+NER, NER model table) + leak test
 ```
 
@@ -381,6 +382,117 @@ docker compose up --build            # http://localhost:8000
 ```
 
 The image (1.9 GB, mostly CPU torch) includes the NER runtime but not the model: it is downloaded on first start into the `hf-cache` volume (a few minutes once; the health check allows 10 minutes). Build with `--build-arg BAKE_NER_MODEL=true` to bake it into the image instead (air-gapped or autoscaled deployments), or `--build-arg EXTRAS=` for a small patterns-only image (then set `PII_SHIELD_NER_ENABLED=false`). Compose stores sessions in Redis without disk persistence and the audit log in a volume. Set `PII_SHIELD_VAULT_KEY` in `.env` for anything beyond a demo, otherwise each restart generates a new key.
+
+## Use with Claude Code and Claude Desktop
+
+Two integrations, both without any LLM call of their own (Claude is the model; PII Shield only adds deterministic detection, policies and the vault):
+
+1. **An MCP server** (`pii-shield mcp`, stdio or Streamable HTTP) that gives Claude the detectors, the policies and the session vault as tools.
+2. **A `UserPromptSubmit` hook** (`pii-shield-prompt-hook`) that scans what you type into Claude Code and blocks or flags the prompt before Claude sees it.
+
+### MCP server tools
+
+| Tool | What it does | Returns originals? |
+|---|---|---|
+| `detect_pii(text, policy?, include_values?)` | Finds personal data: type, character span, confidence, detector, whether a checksum validated it, and what the policy would do. Says whether the policy would block the text. Stores nothing. | Only with `include_values=true` (the values are already in `text`) |
+| `redact(text, policy?, session_id?)` | Applies a policy: placeholders (`<EMAIL_1>`), synthetic stand-ins, masks, hashes, or refuses the text (`blocked`, no text returned). Returns the redacted text and a `session_id`; reuse it to keep placeholders consistent. | Never. The mapping stays in the server's encrypted vault |
+| `redact_file(path, policy?, session_id?)` | Reads a local UTF-8 file **on the server side** and returns only the redacted version, so the raw content never enters the conversation. Confined to the file root (`--root`, default `$CLAUDE_PROJECT_DIR` or the cwd). | Never |
+| `list_policies()` | The team's YAML policies: per-entity actions, blocked types, what is reversible, detector layers; plus the server settings (NER on/off, restore on/off, file root, vault TTL). | n/a |
+| `restore(text, session_id, output_path?)` | Only with `--allow-restore`. Puts the originals back. With `output_path` it writes a new file inside the root and returns only counts; without it the restored text is returned to Claude. | Inline mode only |
+
+**Why `restore` is off by default.** Every value `restore` returns inline becomes part of Claude's context, which undoes the redaction for the rest of the session. So the default server cannot restore at all; restoring is the user's step (`pii-shield restore --session ...` with the file vault, or the gateway). With `--allow-restore`, prefer `output_path`: Claude drafts with placeholders, the server writes the final text with real values to a file, and Claude only sees "2 placeholders restored". Existing files are never overwritten.
+
+Other safety properties: detection is deterministic (patterns with validators; the LLM detector is never built in this server, whatever the policy says); `--ner` adds the local GLiNER model for names, addresses and organizations, and without it every result says that names are **not** detected. Policies keep their fail-closed rule. Inputs are capped (`--max-chars`, default 200,000) and redacted text is truncated at 40,000 characters with a note. Results mark the redacted text as document content, to be treated as data and not as instructions. Errors never echo the input. Read-only tools carry `readOnlyHint`. The HTTP transport binds to `127.0.0.1` by default with DNS-rebinding protection, and refuses a public address unless you pass `--allow-remote`, because it has no authentication.
+
+### Connect it
+
+**Claude Code** (stdio; `uv` must be on `PATH`):
+
+```bash
+claude mcp add --transport stdio pii-shield -- uv run --directory /absolute/path/to/pii-redaction-gateway pii-shield mcp
+# add --ner for names/addresses/orgs (needs `uv sync --extra ner` + `pii-shield download-model`), --allow-restore to expose restore
+```
+
+Add `--scope project` before the server name to write a `.mcp.json` that teammates get when they open the project (Claude Code asks each of them to approve it). The file looks like [`.mcp.json.example`](.mcp.json.example):
+
+```json
+{
+  "mcpServers": {
+    "pii-shield": {
+      "command": "uv",
+      "args": ["run", "--directory", "/absolute/path/to/pii-redaction-gateway", "pii-shield", "mcp"],
+      "env": { "PII_SHIELD_DEFAULT_POLICY": "support-chat" }
+    }
+  }
+}
+```
+
+**Claude Desktop**: add the same entry to `claude_desktop_config.json` (macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`, Windows: `%APPDATA%\Claude\claude_desktop_config.json`; or Settings > Developer > Edit Config), then quit and restart Claude Desktop. Desktop has no project directory, so pass the folder `redact_file` may read:
+
+```json
+{
+  "mcpServers": {
+    "pii-shield": {
+      "command": "/absolute/path/to/uv",
+      "args": ["run", "--directory", "/absolute/path/to/pii-redaction-gateway", "pii-shield", "mcp",
+               "--root", "/absolute/path/to/customer-exports"]
+    }
+  }
+}
+```
+
+**Streamable HTTP** (one server shared by several clients on the same machine):
+
+```bash
+uv run pii-shield mcp --http --port 8765            # endpoint: http://127.0.0.1:8765/mcp
+claude mcp add --transport http pii-shield http://127.0.0.1:8765/mcp
+```
+
+Sessions live in the server's vault (in memory by default, `PII_SHIELD_VAULT_TTL_SECONDS`, 1 hour). To restore later from the CLI, run the server with `PII_SHIELD_VAULT_BACKEND=file` and a fixed `PII_SHIELD_VAULT_KEY` (`pii-shield keygen`); `pii-shield restore --session <id>` then reads the same vault.
+
+### Example prompts
+
+- *"Summarize the complaints in `exports/tickets-2026-10.txt` and draft a reply to each customer."* Claude calls `redact_file` and works on `Hi <PERSON_1>, your order to <ADDRESS_1> ...` (names and addresses need the server started with `--ner`; emails, phones, cards and IDs are found without it). The personal data in the file never enters the conversation, and the drafts keep the placeholders.
+- *"Is it safe to paste this log into the public issue tracker?"* Claude calls `detect_pii`, gets for example `EMAIL x2, IP_ADDRESS x1, SECRET x1` with spans, and calls `redact` to produce a version that is safe to post.
+- Safety: *"Redact this for the finance bot: card 4111 1111 1111 1111, Anna Petrova"* with `policy="strict-finance"`. The policy blocks card numbers, so `redact` returns `blocked: true`, `block_reasons: ["CREDIT_CARD"]` and **no text**. Claude has nothing to forward and tells you to remove the card number. With the default server it also cannot fetch originals back: there is no `restore` tool.
+
+### Prompt hook for Claude Code
+
+The MCP tools only help with text Claude has not seen yet. Text you paste into the prompt reaches Claude directly, so the hook checks it first. It runs patterns and the policy's allow- and deny-lists only (no NER, no LLM, about 0.3 s per prompt including `uv run`), and acts only on the entity types you select (default: `CREDIT_CARD,IBAN,US_SSN,NATIONAL_ID,SECRET`; `--types all` for everything, add `EMAIL,PHONE` if contact data counts for your team).
+
+- `--mode block` (default): returns `{"decision": "block", "reason": ...}`. The prompt never reaches Claude, and the reason lists types and counts, never values. `suppressOriginalPrompt` keeps the text out of the block message. Claude Code still keeps the prompt in your local transcript and prompt history, so this protects what is sent to the model, not your disk.
+- `--mode warn`: the prompt goes through, you see a warning (`systemMessage`), and Claude gets `additionalContext` asking it not to repeat or store the values.
+- `--policy NAME_OR_YAML`: thresholds and allow/deny lists from a packaged policy (default `support-chat`) or your own YAML; deny-list hits count as `CUSTOM`.
+- If the hook itself fails (bad input, unknown type or policy), block mode fails closed with an explanation and warn mode reports a non-blocking error.
+
+Project-level `.claude/settings.json` (shared with the repository; for yourself only, use `.claude/settings.local.json`). Your global `~/.claude/settings.json` is not touched:
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv",
+            "args": ["run", "--directory", "/absolute/path/to/pii-redaction-gateway", "pii-shield-prompt-hook",
+                     "--mode", "block", "--types", "CREDIT_CARD,IBAN,US_SSN,NATIONAL_ID,SECRET"],
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+`UserPromptSubmit` takes no `matcher`. The `args` (exec) form runs without a shell, so paths with spaces need no quoting. If `pii-shield` is installed in the project's environment, use `"command": "pii-shield-prompt-hook"` with only the flags as `args`. On Claude Code v2.1.295 or later you can add `"onFailure": "block"` so a timeout blocks the prompt too. Try it by hand:
+
+```bash
+echo '{"hook_event_name":"UserPromptSubmit","prompt":"refund card 4111 1111 1111 1111"}' | uv run pii-shield-prompt-hook
+# {"decision": "block", "reason": "PII Shield blocked this prompt before it reached Claude: it contains CREDIT_CARD x1. ...", ...}
+```
 
 ## Run with free models via OpenRouter
 
@@ -450,16 +562,18 @@ src/pii_shield/
 ├── policy.py            # policy models, YAML loading, policy sets
 ├── policies/            # support-chat, strict-finance, natural-text, analytics-irreversible
 ├── shield.py            # library facade: Shield, ShieldSession, RedactionResult
+├── mcp_server.py        # MCP server: detect_pii, redact, redact_file, list_policies, opt-in restore
+├── claude_hook.py       # Claude Code UserPromptSubmit hook (pii-shield-prompt-hook)
 ├── audit.py             # PII-free audit records (memory + JSONL)
 ├── providers/           # fake, OpenAI/OpenRouter (httpx), Anthropic (SDK), free-only guard, resilient wrapper
 ├── gateway/             # FastAPI app, message redaction/restore, streaming, tenants, runtime wiring
 ├── dashboard/           # playground, evaluation and audit pages (Jinja2 + htmx)
 ├── eval/                # gold compiler, metrics, detection, leak, utility, report
-└── cli.py               # pii-shield redact | restore | serve | eval | gold | models | policies | keygen | download-model
+└── cli.py               # pii-shield redact | restore | serve | mcp | eval | gold | models | policies | keygen | ...
 data/gold/               # labeled markup source + compiled gold.jsonl + data card
 configs/                 # eval.yaml, tenants.example.yaml
 results/                 # committed evaluation artifacts and call ledger
-tests/                   # 195 tests (no keys; the GLiNER test runs only when the model is cached)
+tests/                   # 230 tests (no keys; the GLiNER test runs only when the model is cached)
 ```
 
 ## Key design decisions
@@ -483,7 +597,7 @@ tests/                   # 195 tests (no keys; the GLiNER test runs only when th
 ## Testing
 
 ```bash
-make test    # 195 tests in ~8 s, no API keys, no model downloads
+make test    # 230 tests in ~12 s, no API keys, no model downloads
 make lint    # ruff check, ruff format --check, mypy --strict
 ```
 
@@ -497,6 +611,8 @@ make lint    # ruff check, ruff format --check, mypy --strict
 | `test_gateway.py` | the OpenAI SDK against the app: non-stream and stream, tool-call arguments both ways, tool messages, block action (upstream never called), policy routes and headers, sessions across requests, tenants, `/v1/redact`, `/audit` without values, dashboard pages, audit file failures |
 | `test_providers.py` | free-only guard (config, request, fallback list, served model), error mapping, SSE parsing, retries + cache + ledger + budget, Anthropic request/response conversion |
 | `test_properties.py` | Hypothesis: redact → restore == original for placeholder and synthetic policies, no redacted value left in the output |
+| `test_mcp_server.py` | every tool through a real MCP client (in-process), no originals in any result, blocked text, helpful errors that do not echo input, file-root confinement incl. symlinks, opt-in restore inline and to a file, the stdio transport as a subprocess |
+| `test_claude_hook.py` | the hook's stdin/stdout JSON contract: silent pass, block and warn outputs without values, type selection, policy allow/deny lists, fail-closed errors, the real console process |
 | `test_metrics_eval.py`, `test_ner_llm.py`, `test_cli.py` | strict/partial/untyped metrics, gold compiler and committed JSONL in sync, leak test, chunking, GLiNER (when cached), LLM detector with a scripted model, CLI redact → restore across invocations |
 
 CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs lint and mypy, the tests, a check that the compiled gold set matches its source, a CLI smoke run and a Docker build, without keys or model downloads. The real-model numbers come from the CLI runs above, not from CI.
