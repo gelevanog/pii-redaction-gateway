@@ -1,0 +1,17 @@
+{
+ "total_requests": 15,
+ "by_status": {
+  "ok": 15
+ },
+ "by_tag": {
+  "utility_model": 10,
+  "utility_judge": 5
+ },
+ "served_models": {
+  "qwen3.7-plus": 10,
+  "claude-opus-5-5": 5
+ },
+ "all_model_ids_free": false,
+ "input_tokens": 5294,
+ "output_tokens": 2212
+}
