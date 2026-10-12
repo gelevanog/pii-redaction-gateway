@@ -1,0 +1,1688 @@
+{
+ "created": "2026-10-12T09:22:26+00:00",
+ "policy": "support-chat",
+ "gold": {
+  "documents": 202,
+  "entities": 330,
+  "negatives": 50,
+  "by_type": {
+   "PERSON": 139,
+   "PHONE": 32,
+   "EMAIL": 31,
+   "ORGANIZATION": 24,
+   "ADDRESS": 23,
+   "SECRET": 16,
+   "DATE_OF_BIRTH": 12,
+   "IP_ADDRESS": 12,
+   "CREDIT_CARD": 10,
+   "IBAN": 9,
+   "URL": 8,
+   "NATIONAL_ID": 8,
+   "US_SSN": 6
+  },
+  "by_domain": {
+   "support": 73,
+   "chat": 28,
+   "email": 26,
+   "crm": 25,
+   "logs": 25,
+   "hr": 18,
+   "medical": 7
+  },
+  "by_language": {
+   "en": 169,
+   "de": 10,
+   "es": 10,
+   "ru": 6,
+   "mixed": 4,
+   "nl": 3
+  }
+ },
+ "configs": [],
+ "llm_subset": {
+  "documents": 68,
+  "every": 3,
+  "entities": 126,
+  "configs": [
+   {
+    "name": "patterns",
+    "label": "Patterns + validators",
+    "layers": [
+     "patterns"
+    ],
+    "models": {},
+    "strict": {
+     "overall": {
+      "tp": 41,
+      "fp": 1,
+      "fn": 85,
+      "precision": 0.9761904761904762,
+      "recall": 0.3253968253968254,
+      "f1": 0.488095238095238
+     },
+     "by_type": {
+      "ADDRESS": {
+       "tp": 0,
+       "fp": 0,
+       "fn": 12,
+       "precision": null,
+       "recall": 0.0,
+       "f1": null
+      },
+      "CREDIT_CARD": {
+       "tp": 3,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "DATE_OF_BIRTH": {
+       "tp": 8,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "EMAIL": {
+       "tp": 11,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "IBAN": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "IP_ADDRESS": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "NATIONAL_ID": {
+       "tp": 3,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "ORGANIZATION": {
+       "tp": 0,
+       "fp": 0,
+       "fn": 9,
+       "precision": null,
+       "recall": 0.0,
+       "f1": null
+      },
+      "PERSON": {
+       "tp": 0,
+       "fp": 0,
+       "fn": 62,
+       "precision": null,
+       "recall": 0.0,
+       "f1": null
+      },
+      "PHONE": {
+       "tp": 10,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9090909090909091,
+       "recall": 1.0,
+       "f1": 0.9523809523809523
+      },
+      "SECRET": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666
+      },
+      "URL": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.6666666666666666,
+       "f1": 0.8
+      }
+     }
+    },
+    "partial": {
+     "overall": {
+      "tp": 41,
+      "fp": 1,
+      "fn": 85,
+      "precision": 0.9761904761904762,
+      "recall": 0.3253968253968254,
+      "f1": 0.488095238095238
+     },
+     "by_type": {
+      "ADDRESS": {
+       "tp": 0,
+       "fp": 0,
+       "fn": 12,
+       "precision": null,
+       "recall": 0.0,
+       "f1": null
+      },
+      "CREDIT_CARD": {
+       "tp": 3,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "DATE_OF_BIRTH": {
+       "tp": 8,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "EMAIL": {
+       "tp": 11,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "IBAN": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "IP_ADDRESS": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "NATIONAL_ID": {
+       "tp": 3,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "ORGANIZATION": {
+       "tp": 0,
+       "fp": 0,
+       "fn": 9,
+       "precision": null,
+       "recall": 0.0,
+       "f1": null
+      },
+      "PERSON": {
+       "tp": 0,
+       "fp": 0,
+       "fn": 62,
+       "precision": null,
+       "recall": 0.0,
+       "f1": null
+      },
+      "PHONE": {
+       "tp": 10,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9090909090909091,
+       "recall": 1.0,
+       "f1": 0.9523809523809523
+      },
+      "SECRET": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666
+      },
+      "URL": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.6666666666666666,
+       "f1": 0.8
+      }
+     }
+    },
+    "untyped": {
+     "tp": 41,
+     "fp": 1,
+     "fn": 85,
+     "precision": 0.9761904761904762,
+     "recall": 0.3253968253968254,
+     "f1": 0.488095238095238
+    },
+    "holdout": {
+     "documents": 12,
+     "strict": {
+      "tp": 8,
+      "fp": 0,
+      "fn": 18,
+      "precision": 1.0,
+      "recall": 0.3076923076923077,
+      "f1": 0.47058823529411764
+     },
+     "partial": {
+      "overall": {
+       "tp": 8,
+       "fp": 0,
+       "fn": 18,
+       "precision": 1.0,
+       "recall": 0.3076923076923077,
+       "f1": 0.47058823529411764
+      },
+      "by_type": {
+       "ADDRESS": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+       },
+       "DATE_OF_BIRTH": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "EMAIL": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "ORGANIZATION": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+       },
+       "PERSON": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 12,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+       },
+       "PHONE": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "SECRET": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+       },
+       "URL": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+       }
+      }
+     },
+     "untyped": {
+      "tp": 8,
+      "fp": 0,
+      "fn": 18,
+      "precision": 1.0,
+      "recall": 0.3076923076923077,
+      "f1": 0.47058823529411764
+     }
+    },
+    "negatives_with_findings": 1,
+    "negatives": 15,
+    "latency_ms": {
+     "mean": 0.5,
+     "p50": 0.32,
+     "p95": 1.55
+    },
+    "layer_latency_ms": {
+     "patterns": 0.48
+    },
+    "detector_errors": 0,
+    "errors": [
+     {
+      "doc": "chat-001",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "jenny"
+     },
+     {
+      "doc": "chat-001",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Jenny"
+     },
+     {
+      "doc": "chat-004",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "12 baker st, london nw1 6xe"
+     },
+     {
+      "doc": "chat-007",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Alex"
+     },
+     {
+      "doc": "chat-007",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Alex"
+     },
+     {
+      "doc": "chat-013",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Hughes"
+     },
+     {
+      "doc": "chat-013",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Hughes"
+     },
+     {
+      "doc": "crm-001",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Peter Halvorsen"
+     },
+     {
+      "doc": "crm-001",
+      "kind": "missed",
+      "type": "ORGANIZATION",
+      "value": "Nordlys Energi AS"
+     },
+     {
+      "doc": "crm-004",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Bianca Rossi"
+     },
+     {
+      "doc": "crm-004",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "Via Garibaldi 22, 10122 Torino"
+     },
+     {
+      "doc": "crm-007",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Victor Ramos"
+     },
+     {
+      "doc": "crm-007",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Ramos"
+     },
+     {
+      "doc": "crm-007",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Victor"
+     },
+     {
+      "doc": "crm-013",
+      "kind": "missed",
+      "type": "ORGANIZATION",
+      "value": "Ashford Dental Practice"
+     },
+     {
+      "doc": "crm-013",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Gemma Hart"
+     },
+     {
+      "doc": "de-001",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "Lindenstraße 27, 50674 Köln"
+     },
+     {
+      "doc": "de-001",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Jürgen Hoffmann"
+     },
+     {
+      "doc": "de-004",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Felix Wagner"
+     },
+     {
+      "doc": "de-004",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "Bergstraße 5a, 69120 Heidelberg"
+     },
+     {
+      "doc": "de-007",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Weiß"
+     },
+     {
+      "doc": "de-007",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Martin Weiß"
+     },
+     {
+      "doc": "de-007",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "Am Markt 3, 04109 Leipzig"
+     },
+     {
+      "doc": "eml-002",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Ben Ashworth"
+     },
+     {
+      "doc": "eml-002",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Claire"
+     },
+     {
+      "doc": "eml-002",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "9 Castle Street, Edinburgh EH2 3AH"
+     },
+     {
+      "doc": "eml-005",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Markus Brandt"
+     },
+     {
+      "doc": "eml-008",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Josh"
+     },
+     {
+      "doc": "eml-008",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Amira Haddad"
+     },
+     {
+      "doc": "eml-008",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Stefan Novak"
+     },
+     {
+      "doc": "eml-011",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Jake Morrison"
+     },
+     {
+      "doc": "es-002",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Jorge Ramírez"
+     },
+     {
+      "doc": "es-005",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Andrés Molina"
+     },
+     {
+      "doc": "es-005",
+      "kind": "missed",
+      "type": "ORGANIZATION",
+      "value": "Construcciones Levante S.L."
+     },
+     {
+      "doc": "hard-001",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Harrison Ford"
+     },
+     {
+      "doc": "ho-001",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "88 Harbour View Road, Apt 12, Portland, ME 04101"
+     },
+     {
+      "doc": "ho-001",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Megan Doyle"
+     },
+     {
+      "doc": "ho-004",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Harold Simmons"
+     },
+     {
+      "doc": "ho-004",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Claire Simmons"
+     },
+     {
+      "doc": "ho-007",
+      "kind": "missed",
+      "type": "SECRET",
+      "value": "rt_9QmZ2vX7kLp4Wn8sB3cY6tR1"
+     },
+     {
+      "doc": "ho-010",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Kofi Mensah"
+     },
+     {
+      "doc": "ho-010",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Lindqvist"
+     },
+     {
+      "doc": "ho-016",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Carmen Ruiz"
+     },
+     {
+      "doc": "ho-016",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "Avenida de la Constitución 21, 41004 Sevilla"
+     },
+     {
+      "doc": "ho-016",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Carmen"
+     },
+     {
+      "doc": "ho-022",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Tom Baxter"
+     },
+     {
+      "doc": "ho-025",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Leo"
+     },
+     {
+      "doc": "ho-028",
+      "kind": "missed",
+      "type": "URL",
+      "value": "linkedin.com/in/oliver-steinberg"
+     },
+     {
+      "doc": "ho-031",
+      "kind": "missed",
+      "type": "ORGANIZATION",
+      "value": "Ridgeway Primary School"
+     },
+     {
+      "doc": "ho-031",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Hope Adeyemi"
+     },
+     {
+      "doc": "ho-034",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Kenji Watanabe"
+     },
+     {
+      "doc": "ho-034",
+      "kind": "missed",
+      "type": "ORGANIZATION",
+      "value": "Sakura Robotics"
+     },
+     {
+      "doc": "ho-034",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Anika"
+     },
+     {
+      "doc": "hr-001",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Rebecca Lyons"
+     },
+     {
+      "doc": "hr-001",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "3 Orchard Close, Cambridge CB4 1XD"
+     },
+     {
+      "doc": "hr-001",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Paul Lyons"
+     },
+     {
+      "doc": "hr-004",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Oliver Grant"
+     },
+     {
+      "doc": "hr-004",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Hannah Kim"
+     },
+     {
+      "doc": "hr-004",
+      "kind": "missed",
+      "type": "ORGANIZATION",
+      "value": "Riverside Medical Centre"
+     },
+     {
+      "doc": "hr-007",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Natalia Ivanova"
+     },
+     {
+      "doc": "hr-007",
+      "kind": "missed",
+      "type": "ORGANIZATION",
+      "value": "Kaspersky Lab"
+     },
+     {
+      "doc": "med-001",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Eleanor Voss"
+     },
+     {
+      "doc": "med-001",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Amit Shah"
+     },
+     {
+      "doc": "med-001",
+      "kind": "missed",
+      "type": "ORGANIZATION",
+      "value": "St. Mary's Hospital"
+     },
+     {
+      "doc": "mix-001",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Lena Fischer"
+     },
+     {
+      "doc": "mix-004",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Julien Moreau"
+     },
+     {
+      "doc": "mix-004",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "7 avenue Victor Hugo, 75016 Paris"
+     },
+     {
+      "doc": "more-003",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Arjun Mehta"
+     },
+     {
+      "doc": "more-006",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Marta Gil"
+     },
+     {
+      "doc": "more-006",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Hugo Gil"
+     },
+     {
+      "doc": "more-009",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Fleur Bakker"
+     },
+     {
+      "doc": "more-012",
+      "kind": "spurious",
+      "type": "PHONE",
+      "value": "4400-1234-5678"
+     },
+     {
+      "doc": "ru-002",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "ул. Ленина, д. 10, кв. 5, Москва"
+     },
+     {
+      "doc": "ru-002",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Ольга Кузнецова"
+     },
+     {
+      "doc": "ru-005",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Анна Белова"
+     },
+     {
+      "doc": "sup-003",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Daniel Kovacs"
+     },
+     {
+      "doc": "sup-003",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Priya"
+     },
+     {
+      "doc": "sup-003",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Kovacs"
+     },
+     {
+      "doc": "sup-003",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Eszter"
+     },
+     {
+      "doc": "sup-006",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Marcus Webb"
+     },
+     {
+      "doc": "sup-012",
+      "kind": "missed",
+      "type": "ORGANIZATION",
+      "value": "Harrow Valley School"
+     },
+     {
+      "doc": "sup-018",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Rahul Gupta"
+     },
+     {
+      "doc": "sup-018",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Sunita Gupta"
+     },
+     {
+      "doc": "sup-024",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "Flat 2, 47 Queen's Road, Brighton BN1 3XE"
+     },
+     {
+      "doc": "sup-027",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Okonkwo"
+     },
+     {
+      "doc": "sup-027",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Tom"
+     }
+    ]
+   },
+   {
+    "name": "patterns+ner",
+    "label": "Patterns + NER",
+    "layers": [
+     "patterns",
+     "ner"
+    ],
+    "models": {
+     "ner": "knowledgator/gliner-pii-base-v1.0"
+    },
+    "strict": {
+     "overall": {
+      "tp": 120,
+      "fp": 6,
+      "fn": 6,
+      "precision": 0.9523809523809523,
+      "recall": 0.9523809523809523,
+      "f1": 0.9523809523809523
+     },
+     "by_type": {
+      "ADDRESS": {
+       "tp": 11,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.9166666666666666,
+       "f1": 0.9565217391304348
+      },
+      "CREDIT_CARD": {
+       "tp": 3,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "DATE_OF_BIRTH": {
+       "tp": 8,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "EMAIL": {
+       "tp": 11,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "IBAN": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "IP_ADDRESS": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "NATIONAL_ID": {
+       "tp": 3,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "ORGANIZATION": {
+       "tp": 8,
+       "fp": 2,
+       "fn": 1,
+       "precision": 0.8,
+       "recall": 0.8888888888888888,
+       "f1": 0.8421052631578948
+      },
+      "PERSON": {
+       "tp": 60,
+       "fp": 3,
+       "fn": 2,
+       "precision": 0.9523809523809523,
+       "recall": 0.967741935483871,
+       "f1": 0.96
+      },
+      "PHONE": {
+       "tp": 10,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9090909090909091,
+       "recall": 1.0,
+       "f1": 0.9523809523809523
+      },
+      "SECRET": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666
+      },
+      "URL": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.6666666666666666,
+       "f1": 0.8
+      }
+     }
+    },
+    "partial": {
+     "overall": {
+      "tp": 122,
+      "fp": 4,
+      "fn": 4,
+      "precision": 0.9682539682539683,
+      "recall": 0.9682539682539683,
+      "f1": 0.9682539682539683
+     },
+     "by_type": {
+      "ADDRESS": {
+       "tp": 11,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.9166666666666666,
+       "f1": 0.9565217391304348
+      },
+      "CREDIT_CARD": {
+       "tp": 3,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "DATE_OF_BIRTH": {
+       "tp": 8,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "EMAIL": {
+       "tp": 11,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "IBAN": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "IP_ADDRESS": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "NATIONAL_ID": {
+       "tp": 3,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "ORGANIZATION": {
+       "tp": 9,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9,
+       "recall": 1.0,
+       "f1": 0.9473684210526316
+      },
+      "PERSON": {
+       "tp": 61,
+       "fp": 2,
+       "fn": 1,
+       "precision": 0.9682539682539683,
+       "recall": 0.9838709677419355,
+       "f1": 0.976
+      },
+      "PHONE": {
+       "tp": 10,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9090909090909091,
+       "recall": 1.0,
+       "f1": 0.9523809523809523
+      },
+      "SECRET": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666
+      },
+      "URL": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.6666666666666666,
+       "f1": 0.8
+      }
+     }
+    },
+    "untyped": {
+     "tp": 123,
+     "fp": 3,
+     "fn": 3,
+     "precision": 0.9761904761904762,
+     "recall": 0.9761904761904762,
+     "f1": 0.9761904761904762
+    },
+    "holdout": {
+     "documents": 12,
+     "strict": {
+      "tp": 23,
+      "fp": 2,
+      "fn": 3,
+      "precision": 0.92,
+      "recall": 0.8846153846153846,
+      "f1": 0.9019607843137256
+     },
+     "partial": {
+      "overall": {
+       "tp": 24,
+       "fp": 1,
+       "fn": 2,
+       "precision": 0.96,
+       "recall": 0.9230769230769231,
+       "f1": 0.9411764705882353
+      },
+      "by_type": {
+       "ADDRESS": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "DATE_OF_BIRTH": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "EMAIL": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "ORGANIZATION": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "PERSON": {
+        "tp": 12,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9230769230769231,
+        "recall": 1.0,
+        "f1": 0.9600000000000001
+       },
+       "PHONE": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "SECRET": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+       },
+       "URL": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+       }
+      }
+     },
+     "untyped": {
+      "tp": 25,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.9615384615384616,
+      "f1": 0.9803921568627451
+     }
+    },
+    "negatives_with_findings": 2,
+    "negatives": 15,
+    "latency_ms": {
+     "mean": 69.84,
+     "p50": 68.51,
+     "p95": 88.59
+    },
+    "layer_latency_ms": {
+     "patterns": 0.43,
+     "ner": 69.24
+    },
+    "detector_errors": 0,
+    "errors": [
+     {
+      "doc": "eml-002",
+      "kind": "missed",
+      "type": "PERSON",
+      "value": "Claire"
+     },
+     {
+      "doc": "hard-001",
+      "kind": "spurious",
+      "type": "PERSON",
+      "value": "Ford"
+     },
+     {
+      "doc": "ho-007",
+      "kind": "missed",
+      "type": "SECRET",
+      "value": "rt_9QmZ2vX7kLp4Wn8sB3cY6tR1"
+     },
+     {
+      "doc": "ho-028",
+      "kind": "missed",
+      "type": "URL",
+      "value": "linkedin.com/in/oliver-steinberg"
+     },
+     {
+      "doc": "ho-028",
+      "kind": "spurious",
+      "type": "PERSON",
+      "value": "oliver-steinberg"
+     },
+     {
+      "doc": "more-012",
+      "kind": "spurious",
+      "type": "PHONE",
+      "value": "4400-1234-5678"
+     },
+     {
+      "doc": "neg-012",
+      "kind": "spurious",
+      "type": "ORGANIZATION",
+      "value": "SSO"
+     },
+     {
+      "doc": "ru-002",
+      "kind": "missed",
+      "type": "ADDRESS",
+      "value": "ул. Ленина, д. 10, кв. 5, Москва"
+     }
+    ]
+   },
+   {
+    "name": "patterns+ner+llm",
+    "label": "Patterns + NER + LLM",
+    "layers": [
+     "patterns",
+     "ner",
+     "llm"
+    ],
+    "models": {
+     "ner": "knowledgator/gliner-pii-base-v1.0",
+     "llm": "qwen3.7-plus"
+    },
+    "strict": {
+     "overall": {
+      "tp": 123,
+      "fp": 8,
+      "fn": 3,
+      "precision": 0.9389312977099237,
+      "recall": 0.9761904761904762,
+      "f1": 0.9571984435797665
+     },
+     "by_type": {
+      "ADDRESS": {
+       "tp": 12,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "CREDIT_CARD": {
+       "tp": 3,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.75,
+       "recall": 1.0,
+       "f1": 0.8571428571428571
+      },
+      "DATE_OF_BIRTH": {
+       "tp": 8,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "EMAIL": {
+       "tp": 11,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "IBAN": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "IP_ADDRESS": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "NATIONAL_ID": {
+       "tp": 3,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "ORGANIZATION": {
+       "tp": 8,
+       "fp": 2,
+       "fn": 1,
+       "precision": 0.8,
+       "recall": 0.8888888888888888,
+       "f1": 0.8421052631578948
+      },
+      "PERSON": {
+       "tp": 61,
+       "fp": 3,
+       "fn": 1,
+       "precision": 0.953125,
+       "recall": 0.9838709677419355,
+       "f1": 0.9682539682539683
+      },
+      "PHONE": {
+       "tp": 10,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9090909090909091,
+       "recall": 1.0,
+       "f1": 0.9523809523809523
+      },
+      "SECRET": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "URL": {
+       "tp": 2,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.6666666666666666,
+       "recall": 0.6666666666666666,
+       "f1": 0.6666666666666666
+      }
+     }
+    },
+    "partial": {
+     "overall": {
+      "tp": 125,
+      "fp": 6,
+      "fn": 1,
+      "precision": 0.9541984732824428,
+      "recall": 0.9920634920634921,
+      "f1": 0.9727626459143969
+     },
+     "by_type": {
+      "ADDRESS": {
+       "tp": 12,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "CREDIT_CARD": {
+       "tp": 3,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.75,
+       "recall": 1.0,
+       "f1": 0.8571428571428571
+      },
+      "DATE_OF_BIRTH": {
+       "tp": 8,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "EMAIL": {
+       "tp": 11,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "IBAN": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "IP_ADDRESS": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "NATIONAL_ID": {
+       "tp": 3,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "ORGANIZATION": {
+       "tp": 9,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9,
+       "recall": 1.0,
+       "f1": 0.9473684210526316
+      },
+      "PERSON": {
+       "tp": 62,
+       "fp": 2,
+       "fn": 0,
+       "precision": 0.96875,
+       "recall": 1.0,
+       "f1": 0.9841269841269841
+      },
+      "PHONE": {
+       "tp": 10,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.9090909090909091,
+       "recall": 1.0,
+       "f1": 0.9523809523809523
+      },
+      "SECRET": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "URL": {
+       "tp": 2,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.6666666666666666,
+       "recall": 0.6666666666666666,
+       "f1": 0.6666666666666666
+      }
+     }
+    },
+    "untyped": {
+     "tp": 126,
+     "fp": 5,
+     "fn": 0,
+     "precision": 0.9618320610687023,
+     "recall": 1.0,
+     "f1": 0.9805447470817121
+    },
+    "holdout": {
+     "documents": 12,
+     "strict": {
+      "tp": 24,
+      "fp": 2,
+      "fn": 2,
+      "precision": 0.9230769230769231,
+      "recall": 0.9230769230769231,
+      "f1": 0.9230769230769231
+     },
+     "partial": {
+      "overall": {
+       "tp": 25,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9615384615384616,
+       "recall": 0.9615384615384616,
+       "f1": 0.9615384615384616
+      },
+      "by_type": {
+       "ADDRESS": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "DATE_OF_BIRTH": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "EMAIL": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "ORGANIZATION": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "PERSON": {
+        "tp": 12,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9230769230769231,
+        "recall": 1.0,
+        "f1": 0.9600000000000001
+       },
+       "PHONE": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "SECRET": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "URL": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+       }
+      }
+     },
+     "untyped": {
+      "tp": 26,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+     }
+    },
+    "negatives_with_findings": 2,
+    "negatives": 15,
+    "latency_ms": {
+     "mean": 2347.31,
+     "p50": 2289.03,
+     "p95": 3003.69
+    },
+    "layer_latency_ms": {
+     "patterns": 0.47,
+     "ner": 76.2,
+     "llm": 2270.46
+    },
+    "detector_errors": 0,
+    "errors": [
+     {
+      "doc": "hard-001",
+      "kind": "spurious",
+      "type": "PERSON",
+      "value": "Ford"
+     },
+     {
+      "doc": "hard-004",
+      "kind": "spurious",
+      "type": "CREDIT_CARD",
+      "value": "6011497465075290"
+     },
+     {
+      "doc": "ho-028",
+      "kind": "missed",
+      "type": "URL",
+      "value": "linkedin.com/in/oliver-steinberg"
+     },
+     {
+      "doc": "ho-028",
+      "kind": "spurious",
+      "type": "PERSON",
+      "value": "oliver-steinberg"
+     },
+     {
+      "doc": "more-003",
+      "kind": "spurious",
+      "type": "URL",
+      "value": "https://github.com/brightloop/sdk-python"
+     },
+     {
+      "doc": "more-012",
+      "kind": "spurious",
+      "type": "PHONE",
+      "value": "4400-1234-5678"
+     },
+     {
+      "doc": "neg-012",
+      "kind": "spurious",
+      "type": "ORGANIZATION",
+      "value": "SSO"
+     }
+    ]
+   }
+  ]
+ },
+ "ner_models": [],
+ "notes": []
+}

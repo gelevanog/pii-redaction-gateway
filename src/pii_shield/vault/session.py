@@ -82,6 +82,25 @@ class SessionState(BaseModel):
             mapping.update(entry.synthetic_variants)
         return mapping
 
+    def synthetic_surfaces_taken(self, exclude: VaultEntry) -> set[str]:
+        """Every surface another entry owns: its original, synthetic value and synthetic variants.
+
+        A new synthetic value must avoid all of them, otherwise restore cannot tell two originals apart.
+        Person names contribute their single tokens too, because a name variant ("Petrova") is replaced
+        with a single token of the synthetic name.
+        """
+        taken: set[str] = set()
+        for entry in self.entries:
+            if entry is exclude:
+                continue
+            surfaces = {entry.original, *entry.synthetic_variants}
+            if entry.synthetic is not None:
+                surfaces.add(entry.synthetic)
+            if entry.type is EntityType.PERSON:
+                surfaces.update(token for surface in list(surfaces) for token in surface.split())
+            taken.update(surfaces)
+        return taken
+
     # ---------------------------------------------------------------------------------- updates
     def get_or_create(self, kind: EntityType, value: str, *, link_names: bool = True) -> VaultEntry:
         entry = self.find(kind, value, link_names=link_names)

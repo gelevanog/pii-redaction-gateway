@@ -1,0 +1,19 @@
+{
+ "total_requests": 172,
+ "by_status": {
+  "ok": 168,
+  "error": 4
+ },
+ "by_tag": {
+  "llm_detector": 71,
+  "utility_model": 61,
+  "utility_judge": 40
+ },
+ "served_models": {
+  "claude-haiku-5-5": 128,
+  "claude-opus-5-5": 40
+ },
+ "all_model_ids_free": false,
+ "input_tokens": 118792,
+ "output_tokens": 41311
+}

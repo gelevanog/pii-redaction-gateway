@@ -1,0 +1,45 @@
+# Paid-model comparison run (not the published baseline; that is configs/eval.yaml with free models only).
+# Calls go to an OpenAI-compatible endpoint; it needs BOTH switches:
+#   require_free_models: false (below)  and  PII_SHIELD_ALLOW_PAID_MODELS=1 in the environment.
+#   OPENAI_API_KEY=<endpoint key> PII_SHIELD_ALLOW_PAID_MODELS=1 \
+#     uv run pii-shield eval detection -c configs/paid-models/opus.yaml --only patterns+ner+llm
+#   ... uv run pii-shield eval utility -c configs/paid-models/opus.yaml
+# Same gold set, subset rule, prompts and policy as the free baseline; only the models differ.
+gold: data/gold/gold.jsonl
+output_dir: results/paid-models/opus
+policy: support-chat
+
+ner_model: knowledgator/gliner-pii-base-v1.0
+
+detectors:
+  - {name: patterns, label: "Patterns + validators", patterns: true}
+  - {name: patterns+ner, label: "Patterns + NER", patterns: true, ner: true}
+  - {name: patterns+ner+llm, label: "Patterns + NER + LLM", patterns: true, ner: true, llm: true}
+
+llm_detector:
+  provider: openai
+  model: claude-opus-5-5
+  fallback_models: []
+  base_url: http://127.0.0.1:8787/v1
+
+utility:
+  task: reply
+  documents: 20
+  domains: [support, email, chat]
+  policy: support-chat
+  model:
+    provider: openai
+    model: claude-opus-5-5
+    fallback_models: []
+    base_url: http://127.0.0.1:8787/v1
+  judge:                      # one judge for every paid run, so verdicts are comparable across answer models
+    provider: openai
+    model: claude-opus-5-5
+    fallback_models: []
+    base_url: http://127.0.0.1:8787/v1
+
+require_free_models: false
+max_calls: 200
+min_seconds_between_requests: 0.5
+llm_concurrency: 1            # the budget proxy answered 403 to some parallel requests in a first attempt
+llm_subset_every: 3

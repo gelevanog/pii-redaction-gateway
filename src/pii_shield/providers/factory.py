@@ -15,7 +15,9 @@ def build_provider(
     kind: ProviderKind | None = None,
     model: str | None = None,
     fallback_models: list[str] | None = None,
+    base_url: str | None = None,
 ) -> ChatProvider:
+    """`base_url` overrides the settings' OpenAI/OpenRouter base URL (any OpenAI-compatible endpoint)."""
     kind = kind or settings.upstream_provider
     if kind == "fake":
         return FakeProvider(model or "fake-echo")
@@ -32,7 +34,7 @@ def build_provider(
     return OpenAICompatibleProvider(
         kind=kind,
         api_key=settings.openrouter_api_key if kind == "openrouter" else settings.openai_api_key,
-        base_url=settings.openrouter_base_url if kind == "openrouter" else settings.openai_base_url,
+        base_url=base_url or (settings.openrouter_base_url if kind == "openrouter" else settings.openai_base_url),
         default_model=default_model,
         fallback_models=settings.upstream_fallback_models if fallback_models is None else fallback_models,
         require_free=settings.require_free_models,

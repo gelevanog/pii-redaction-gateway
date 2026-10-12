@@ -1,0 +1,18 @@
+{
+ "total_requests": 168,
+ "by_status": {
+  "ok": 168
+ },
+ "by_tag": {
+  "llm_detector": 68,
+  "utility_model": 60,
+  "utility_judge": 40
+ },
+ "served_models": {
+  "qwen3.7-plus": 128,
+  "claude-opus-5-5": 40
+ },
+ "all_model_ids_free": false,
+ "input_tokens": 65178,
+ "output_tokens": 14980
+}

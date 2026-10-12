@@ -1,0 +1,137 @@
+{
+ "source": "results/utility.json",
+ "answer_model": "nvidia/nemotron-3-super-120b-a12b:free",
+ "original_judge": "dots-studio/dots-3-note-preview:free",
+ "judge_model": "claude-opus-5-5",
+ "documents": 20,
+ "verdicts": {
+  "better": 8,
+  "equivalent": 3,
+  "worse": 9,
+  "error": 0
+ },
+ "equivalent_or_better": 0.55,
+ "agreement_with_original_judge": 0.45,
+ "items": [
+  {
+   "doc": "de-001",
+   "free_judge_verdict": "worse",
+   "opus_verdict": "worse",
+   "reason": "Both replies correctly confirm the address change, but Reply A uses the proper German salutation 'Sehr geehrter Herr Hoffmann', while Reply B's 'Sehr geehrte/r Jürgen Hoffmann' is an awkward generic form that ignores the customer's evident gender and is less polished."
+  },
+  {
+   "doc": "de-007",
+   "free_judge_verdict": "worse",
+   "opus_verdict": "worse",
+   "reason": "Both replies use the customer's name correctly, but Reply A is more helpful, offering concrete troubleshooting steps and a free replacement, despite awkwardly saying the support team 'received' the invoice; Reply B only promises vaguely to follow up."
+  },
+  {
+   "doc": "eml-004",
+   "free_judge_verdict": "better",
+   "opus_verdict": "better",
+   "reason": "Both replies use the names correctly, but Reply A asks for the account email before proceeding, while Reply B promises to transfer someone else's account without any identifying details or authorization from the account holder."
+  },
+  {
+   "doc": "eml-009",
+   "free_judge_verdict": "worse",
+   "opus_verdict": "better",
+   "reason": "Both replies wrongly assume the sender is Patricia, but Reply B also needlessly repeats her full date of birth and home address, while Reply A confirms receipt without exposing that sensitive data."
+  },
+  {
+   "doc": "eml-011",
+   "free_judge_verdict": "worse",
+   "opus_verdict": "worse",
+   "reason": "The customer's message is only an email signature. Both replies correctly ask how to help, but Reply A treats the 'Sent from my iPhone' boilerplate as meaningful and awkwardly uses the full name, while Reply B handles the empty message cleanly and naturally."
+  },
+  {
+   "doc": "eml-012",
+   "free_judge_verdict": "better",
+   "opus_verdict": "better",
+   "reason": "Reply B leaves the unresolved placeholder '[Customer Name]', which the rubric explicitly penalizes, and it presumes to send the report straight to Leonard Pike without the customer's confirmation, while Reply A is error-free even though it is more generic."
+  },
+  {
+   "doc": "eml-015",
+   "free_judge_verdict": "worse",
+   "opus_verdict": "better",
+   "reason": "Both replies repeat the phone number, extension, and contact name correctly, but Reply A contains the unresolved placeholder '[Customer Name]', which makes it worse."
+  },
+  {
+   "doc": "ho-001",
+   "free_judge_verdict": "equivalent",
+   "opus_verdict": "equivalent",
+   "reason": "Both replies correctly confirm the update to order BL-551203 with the exact new address and address the customer correctly, so the differences in greeting, sign-off and wording do not meaningfully change quality."
+  },
+  {
+   "doc": "ho-002",
+   "free_judge_verdict": "equivalent",
+   "opus_verdict": "equivalent",
+   "reason": "Both replies correctly update the motion-alert email to m.okafor@fastmail.com, reference the correct SMS number and customer name, and contain no placeholders; the remaining differences are stylistic and do not change quality."
+  },
+  {
+   "doc": "ho-015",
+   "free_judge_verdict": "worse",
+   "opus_verdict": "better",
+   "reason": "Both replies use the customer's name and account correctly, but Reply B masks the IBAN (showing only the correct last digits), which is safer for bank data, while Reply A repeats the full account number and promises a 3–5 day timeline that may not be verified."
+  },
+  {
+   "doc": "ho-023",
+   "free_judge_verdict": "equivalent",
+   "opus_verdict": "equivalent",
+   "reason": "Both replies confirm the signed contract and the 3 November delivery requested by Ngozi Okafor, and both make the same error of greeting the customer as \"Ruth\" when Ruth is actually the recipient, so they are of comparable quality."
+  },
+  {
+   "doc": "mix-001",
+   "free_judge_verdict": "equivalent",
+   "opus_verdict": "worse",
+   "reason": "Both replies use Lena's name, phone number and language preferences correctly, but B acts on her callback request by confirming the call and asking for a preferred time, while A only says a call is possible."
+  },
+  {
+   "doc": "mix-002",
+   "free_judge_verdict": "better",
+   "opus_verdict": "better",
+   "reason": "Both replies correctly use pablo.herrera@tecnova.es and both mistakenly address Pablo instead of the colleague who relayed the request, but Reply B claims the invoice has already been sent, which cannot be verified, whereas Reply A only commits to sending it."
+  },
+  {
+   "doc": "more-006",
+   "free_judge_verdict": "better",
+   "opus_verdict": "worse",
+   "reason": "Reply B is more helpful and correct because it asks for the documents a change of account holder plausibly needs (Hugo's DNI copy and proof of authorization) instead of claiming, as Reply A does, that the change is already in progress without any verification; B's unresolved '[Tu nombre]' placeholder in the signature is a real flaw that narrows its lead, and both replies use the names and DNI numb"
+  },
+  {
+   "doc": "ru-002",
+   "free_judge_verdict": "equivalent",
+   "opus_verdict": "worse",
+   "reason": "Both replies wrongly greet the customer as the recipient Ольга, but B is slightly better because it avoids A's unverified claim that delivery is already arranged and helpfully offers to clarify delivery time."
+  },
+  {
+   "doc": "sup-002",
+   "free_judge_verdict": "better",
+   "opus_verdict": "worse",
+   "reason": "Reply A opens the investigation right away, while Reply B makes Kevin re-confirm the address he already gave and holds off the investigation until he does, adding needless friction; both use his name correctly."
+  },
+  {
+   "doc": "sup-010",
+   "free_judge_verdict": "better",
+   "opus_verdict": "worse",
+   "reason": "Reply A confirms the switch and writes the address in its standard, unambiguous form (jsmith2009@yahoo.com), while Reply B keeps the obfuscated form and adds spam-folder and safe-sender advice that does not address the customer's request to change addresses."
+  },
+  {
+   "doc": "sup-014",
+   "free_judge_verdict": "worse",
+   "opus_verdict": "better",
+   "reason": "Reply A contains an unresolved '[Your Name]' placeholder and an invented support phone number; Reply B gives correct, clean power-cycle guidance with Camille's name used properly, which outweighs A's somewhat richer troubleshooting."
+  },
+  {
+   "doc": "sup-016",
+   "free_judge_verdict": "better",
+   "opus_verdict": "worse",
+   "reason": "Both replies address the customer correctly and confirm verification, but Reply A needlessly repeats the customer's date of birth and postcode, while Reply B acknowledges them without exposing that sensitive data."
+  },
+  {
+   "doc": "sup-018",
+   "free_judge_verdict": "equivalent",
+   "opus_verdict": "better",
+   "reason": "Neither reply verifies the mother's consent or ownership before merging, but A correctly distinguishes Rahul's account from his mother's, whereas B calls them 'your two accounts', claims the merge has already started, and invents a 24-hour timeline."
+  }
+ ]
+}

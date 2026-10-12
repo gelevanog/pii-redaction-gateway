@@ -82,6 +82,39 @@ def test_synthetic_is_reversible_through_the_session() -> None:
     assert report.synthetic_restored == 2
 
 
+def test_synthetic_stand_ins_are_unique_within_a_session() -> None:
+    # Only 762 documentation IPv4 addresses exist, so with 300 IPs the first-choice stand-ins collide often.
+    state = SessionState(session_id="s1")
+    anonymizer = Anonymizer(SECRET)
+    rule = EntityRule(action=Action.SYNTHETIC)
+    ips = [f"81.2.{i // 250}.{i % 250 + 1}" for i in range(300)]
+    fakes = [anonymizer.replace(state, EntityType.IP_ADDRESS, ip, rule) for ip in ips]
+    assert len(set(fakes)) == len(ips)
+    restored, _ = restore_text(" ".join(fakes), state)
+    assert restored == " ".join(ips)
+
+
+def test_synthetic_falls_back_to_a_placeholder_when_the_pool_is_exhausted() -> None:
+    state = SessionState(session_id="s1")
+    anonymizer = Anonymizer(SECRET)
+    rule = EntityRule(action=Action.SYNTHETIC)
+    ips = [f"81.2.{i // 250}.{i % 250 + 1}" for i in range(800)]  # more IPs than stand-ins
+    replaced = [anonymizer.replace(state, EntityType.IP_ADDRESS, ip, rule) for ip in ips]
+    assert any(r.startswith("<IP_ADDRESS_") for r in replaced)
+    restored, _ = restore_text(" | ".join(replaced), state)
+    assert restored == " | ".join(ips)
+
+
+def test_synthetic_person_tokens_do_not_collide_across_people() -> None:
+    state = SessionState(session_id="s1")
+    anonymizer = Anonymizer(SECRET)
+    rule = EntityRule(action=Action.SYNTHETIC)
+    people = [f"Anna{chr(97 + i // 26)}{chr(97 + i % 26)} Petrova{i}" for i in range(200)]
+    fakes = [anonymizer.replace(state, EntityType.PERSON, p, rule) for p in people]
+    tokens = [token for fake in fakes for token in fake.split()]
+    assert len(set(tokens)) == len(tokens)  # "Petrova3" -> fake last name restores to one person only
+
+
 def test_restore_tolerates_placeholder_variants_and_reports_unknown() -> None:
     state = SessionState(session_id="s1")
     entry = state.get_or_create(EntityType.EMAIL, "anna@gmail.com")

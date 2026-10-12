@@ -53,7 +53,7 @@ It helps with data minimization and with keeping personal data inside your infra
 - **Policies in YAML** per tenant or route: actions, confidence thresholds per entity type, allow-lists (your brand, public support addresses), deny-lists (internal code names), detector layers, fail-closed. Four examples ship: `support-chat`, `strict-finance`, `natural-text`, `analytics-irreversible`.
 - **Session vault**: placeholder ↔ original per conversation, **AES-256-GCM encrypted at rest** with the session id bound as associated data, with a TTL; in-memory, Redis (several replicas) or file (CLI) backend; per-session locking.
 - **Audit log without PII**: entity counts by type and action, policy, latencies, upstream model, keyed hashes of the request and session. `GET /audit` and a [dashboard page](docs/screenshots/audit-log.png). Logs never contain values (a structlog processor drops text-carrying keys as a last line of defence).
-- **Providers**: `fake` (deterministic offline echo bot, so tests, CI and the Docker demo need no keys), OpenRouter (with a `models` fallback list), OpenAI, Anthropic (official SDK, OpenAI ↔ Messages conversion including tool calls and streaming). The OpenRouter path ran against the live API for every number in this README; the OpenAI and Anthropic paths are unit-tested (request shapes, conversion, error mapping) but were not run against those live APIs here. A **free-only guard** refuses any OpenRouter model id that does not end in `:free`, also checking the model that actually answered.
+- **Providers**: `fake` (deterministic offline echo bot, so tests, CI and the Docker demo need no keys), OpenRouter (with a `models` fallback list), OpenAI, Anthropic (official SDK, OpenAI ↔ Messages conversion including tool calls and streaming). The OpenRouter path ran against the live API for the main results; the OpenAI-compatible path ran against a budget proxy for the [model comparison](#model-comparison); the Anthropic SDK path is unit-tested (request shapes, conversion, error mapping) but was not run against the live API here. A **free-only guard** refuses any OpenRouter model id that does not end in `:free`, also checking the model that actually answered.
 - **Dashboard** (Jinja2 + htmx, no build step): the four-panel playground with a fake/real model toggle, the evaluation results and the audit log.
 - **Evaluation you can rerun**: hand-labeled gold set, P/R/F1 per entity type and detector layer (strict, partial, any-type), a leak test through the real gateway, a real-model utility test with an LLM judge and its noise floor, property-based round-trip tests.
 
@@ -333,13 +333,42 @@ The judge calls one of two samples of the *same* prompt "worse" 6 times in 20, s
 
 **275 real requests, every one to a `:free` model id** (the ledger is [`results/calls.jsonl`](results/calls.jsonl); `uv run pii-shield calls` prints the breakdown): 4 smoke tests of three candidate models (`google/gemma-4-31b-it:free` was rate-limited, so it became a fallback only), 68 LLM-detector calls, 119 answer-model and 82 judge calls across the three utility runs and the noise floor, and 2 playground calls for the screenshot. 264 succeeded; 5 were retried (rate limits, and a judge whose reasoning used up its token budget before the limit was raised); 6 failed (two reasoning answers cut off at `max_tokens`, three upstream `403 Access denied by security policy`, one content filter). 69k input and 150k output tokens, $0. Responses are cached on disk, so re-running the evaluation replays them without new calls.
 
+## Model comparison
+
+The defaults stay free-only (OpenRouter `:free` models, `PII_SHIELD_REQUIRE_FREE_MODELS=true`); stronger models are an explicit opt-in that needs two switches, `require_free_models: false` in an eval config and `PII_SHIELD_ALLOW_PAID_MODELS=1`:
+
+```bash
+# configs/paid-models/*.yaml set require_free_models: false and a per-role base_url (any OpenAI-compatible endpoint)
+export PII_SHIELD_ALLOW_PAID_MODELS=1 OPENAI_API_KEY=<endpoint key>
+uv run pii-shield eval detection -c configs/paid-models/haiku.yaml --only patterns+ner+llm
+uv run pii-shield eval utility -c configs/paid-models/haiku.yaml
+```
+
+Same gold set, document selection, prompts, `support-chat` policy and local NER as the free baseline above; only the LLMs differ (run on 2026-10-12). Utility is judged by Claude Opus 5.5 for every paid run, so compare it with the free answers re-judged by the same judge.
+
+| Answer / detector model | Utility: as good or better, 20 docs (noise floor) | LLM detector F1 partial, 68 docs | Detector latency / doc | Detector cost / doc |
+|---|---:|---:|---:|---:|
+| Free baseline (`nemotron-3-super-120b-a12b:free`), free judge | 65% (70%) | 0.977 | 9.0 s | $0 |
+| Same free answers, Opus judge | 55% (not run) | | | |
+| Claude Haiku 5.5 | 70% (45%) | 0.980 | 2.3 s | ≈ $0.00013 |
+| Claude Opus 5.5 (judges itself) | 70% (80%) | 0.977 | 3.1 s | ≈ $0.0045 |
+| Qwen 3.7 Plus | 70% (85%) | 0.973 | 2.3 s | ≈ 380 tokens (prepaid quota) |
+
+- Restoring placeholders does not depend on the model: every model, free included, restored 100% of the placeholders in its raw answers (220 in total) and left none behind.
+- Utility differences are within the noise: 70% vs 55% under the same judge is 3 documents out of 20, the noise floors range from 45% to 85%, and part of the Haiku and Opus gain comes from the judge penalizing `[Your Name]`-style slots that only the unredacted replies contain.
+- For the LLM detector, free is enough on quality: all four found 126/126 gold values (recall 0.992; patterns + NER alone reach F1 0.968, the LLM layers 0.973-0.980). A paid model buys speed: Haiku is about 4x faster than the free model at about $0.00013 per document; Opus is no more precise and costs about 35x more than Haiku; Qwen added one false positive (a public GitHub repository URL).
+- One failure is shared by every model: `<PERSON_1>` hides the customer's gender, so a German reply opens with "Sehr geehrte/r". A stronger model does not fix it; gender-aware placeholders or the `natural-text` policy would.
+- The judge matters as much as the answer model: the free and the Opus judge agreed on only 9 of 20 identical answer pairs.
+
+Full tables, call ledgers, costs, incidents (intermittent proxy 403s, a discarded first attempt) and caveats: [`results/paid-models/COMPARISON.md`](results/paid-models/COMPARISON.md).
+
 ## Quick start (no API keys)
 
 ```bash
 uv sync --all-extras                 # Python 3.12; the `ner` extra pulls CPU-only torch + GLiNER
 uv run pii-shield download-model     # GLiNER PII base, PyTorch weights only (~660 MB, once)
 make serve                           # gateway + dashboard on http://localhost:8000, fake upstream
-make test                            # 186 tests, no keys, no downloads in CI
+make test                            # 195 tests, no keys, no downloads in CI
 make eval-offline                    # detection (patterns, patterns+NER, NER model table) + leak test
 ```
 
@@ -363,7 +392,7 @@ make eval-real                                    # LLM-detector comparison + ut
 uv run pii-shield calls                           # every real request, by tag, status and served model
 ```
 
-With `PII_SHIELD_REQUIRE_FREE_MODELS=true` (the default) any OpenRouter model id that does not end in `:free`, in the request or in its `models` fallback list, is refused before the request is sent, and an answer served by a non-free model is rejected. Free models are rate-limited and come and go, so real runs throttle (one request start every 3 s), retry 429/5xx with exponential backoff and `Retry-After`, pass a fallback list, cache every answer on disk, and stop at a hard call budget recorded in a ledger. To use paid models, set the guard to `false` and pick a provider: `openai` (`OPENAI_API_KEY`), `anthropic` (`ANTHROPIC_API_KEY`, default `claude-sonnet-5`) or any OpenRouter model.
+With `PII_SHIELD_REQUIRE_FREE_MODELS=true` (the default) any OpenRouter model id that does not end in `:free`, in the request or in its `models` fallback list, is refused before the request is sent, and an answer served by a non-free model is rejected. Free models are rate-limited and come and go, so real runs throttle (one request start every 3 s), retry 429/5xx with exponential backoff and `Retry-After`, pass a fallback list, cache every answer on disk, and stop at a hard call budget recorded in a ledger. To use paid models in the gateway, set the guard to `false` and pick a provider: `openai` (`OPENAI_API_KEY`), `anthropic` (`ANTHROPIC_API_KEY`, default `claude-sonnet-5`) or any OpenRouter model. Evaluation runs need a second switch: a config with `require_free_models: false` is refused unless `PII_SHIELD_ALLOW_PAID_MODELS=1` is set (see [Model comparison](#model-comparison)).
 
 ## Configuration
 
@@ -374,6 +403,7 @@ Runtime settings are environment variables ([`.env.example`](.env.example) docum
 | `PII_SHIELD_UPSTREAM_PROVIDER` | `fake` | `fake`, `openrouter`, `openai`, `anthropic` |
 | `PII_SHIELD_UPSTREAM_MODEL` / `_FALLBACK_MODELS` | provider default | model when the client sends none or `auto`; OpenRouter fallback list |
 | `PII_SHIELD_REQUIRE_FREE_MODELS` | `true` | free-only guard for OpenRouter |
+| `PII_SHIELD_ALLOW_PAID_MODELS` | `false` | second switch for eval configs with `require_free_models: false` |
 | `OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` | unset | upstream keys (the client's key is never forwarded) |
 | `PII_SHIELD_DEFAULT_POLICY` / `_POLICIES_DIR` | `support-chat` / packaged | policy selection |
 | `PII_SHIELD_ALLOW_POLICY_HEADER` | `true` | allow `X-PII-Policy` |
@@ -429,7 +459,7 @@ src/pii_shield/
 data/gold/               # labeled markup source + compiled gold.jsonl + data card
 configs/                 # eval.yaml, tenants.example.yaml
 results/                 # committed evaluation artifacts and call ledger
-tests/                   # 186 tests (no keys; the GLiNER test runs only when the model is cached)
+tests/                   # 195 tests (no keys; the GLiNER test runs only when the model is cached)
 ```
 
 ## Key design decisions
@@ -453,7 +483,7 @@ tests/                   # 186 tests (no keys; the GLiNER test runs only when th
 ## Testing
 
 ```bash
-make test    # 186 tests in ~8 s, no API keys, no model downloads
+make test    # 195 tests in ~8 s, no API keys, no model downloads
 make lint    # ruff check, ruff format --check, mypy --strict
 ```
 
@@ -461,7 +491,7 @@ make lint    # ruff check, ruff format --check, mypy --strict
 |---|---|
 | `test_validators.py`, `test_recognizers.py` | every validator and recognizer with positives and negatives: Luhn, mod-97, SSN rules, DNI/NIE, BSN, entropy; obfuscated emails, phones vs order numbers and dates, versions vs IPs, personal vs project URLs, DOB in five languages, secret formats vs UUIDs and digests |
 | `test_merge_pipeline.py` | overlap resolution, title trimming, name linking and ambiguous words, role words, thresholds, allow- and deny-lists, placeholders in the input, failing and missing detectors |
-| `test_anonymize.py` | each action; consistent placeholders; format-preserving synthetic values in safe ranges; tolerant restore; JSON-string escaping |
+| `test_anonymize.py` | each action; consistent placeholders; format-preserving synthetic values in safe ranges, unique within a session (placeholder fallback when a pool runs out); tolerant restore; JSON-string escaping |
 | `test_session_vault.py` | consistency across turns, name variants, ambiguous names, encryption at rest, session binding, wrong key, TTL (memory, file), Redis via fakeredis, locks |
 | `test_streaming.py` | restore across chunk boundaries at every split point and chunk size, multi-digit placeholders, JSON arguments, synthetic values |
 | `test_gateway.py` | the OpenAI SDK against the app: non-stream and stream, tool-call arguments both ways, tool messages, block action (upstream never called), policy routes and headers, sessions across requests, tenants, `/v1/redact`, `/audit` without values, dashboard pages, audit file failures |
