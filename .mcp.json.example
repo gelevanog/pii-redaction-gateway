@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "pii-shield": {
+      "command": "uv",
+      "args": ["run", "--directory", "/absolute/path/to/pii-redaction-gateway", "pii-shield", "mcp"],
+      "env": {
+        "PII_SHIELD_DEFAULT_POLICY": "support-chat"
+      }
+    }
+  }
+}

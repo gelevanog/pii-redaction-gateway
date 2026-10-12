@@ -1,4 +1,4 @@
-"""Command line: `pii-shield redact | restore | serve | eval | gold | models | policies | keygen | download-model`."""
+"""Command line: `pii-shield redact | restore | serve | mcp | eval | gold | models | policies | keygen | ...`."""
 
 from __future__ import annotations
 
@@ -134,6 +134,47 @@ def serve(
     import uvicorn
 
     uvicorn.run("pii_shield.gateway.app:create_default_app", factory=True, host=host, port=port, reload=reload)
+
+
+@app.command("mcp")
+def mcp_command(
+    http: Annotated[bool, typer.Option("--http", help="Streamable HTTP instead of stdio.")] = False,
+    host: Annotated[str, typer.Option(help="HTTP bind address (loopback only unless --allow-remote).")] = "127.0.0.1",
+    port: Annotated[int, typer.Option(help="HTTP port; the endpoint is http://HOST:PORT/mcp.")] = 8765,
+    policy: Annotated[str | None, typer.Option("--policy", "-p", help="Default policy for the tools.")] = None,
+    ner: Annotated[
+        bool, typer.Option("--ner/--no-ner", help="Also detect names, addresses, orgs with local GLiNER.")
+    ] = False,
+    allow_restore: Annotated[
+        bool, typer.Option("--allow-restore", help="Expose the `restore` tool (originals become visible to Claude).")
+    ] = False,
+    root: Annotated[
+        Path | None,
+        typer.Option(help="Directory redact_file / restore may touch (default: $CLAUDE_PROJECT_DIR or the cwd)."),
+    ] = None,
+    max_chars: Annotated[int, typer.Option(help="Largest text or file the tools accept, in characters.")] = 200_000,
+    allow_remote: Annotated[
+        bool, typer.Option("--allow-remote", help="Allow a non-loopback --host (the HTTP transport has no auth).")
+    ] = False,
+) -> None:
+    """Run the MCP server (stdio by default) for Claude Code and Claude Desktop. No LLM calls."""
+    from pii_shield.mcp_server import run_server
+
+    if http and host not in ("127.0.0.1", "localhost", "::1") and not allow_remote:
+        err.print(f"[red]Refusing to bind {host}: the MCP HTTP transport has no authentication. Use --allow-remote.[/]")
+        raise typer.Exit(1)
+    overrides: dict[str, object] = {"ner_enabled": ner, "ner_preload": False}
+    if policy:
+        overrides["default_policy"] = policy
+    run_server(
+        _settings(**overrides),
+        http=http,
+        host=host,
+        port=port,
+        root=root,
+        allow_restore=allow_restore,
+        max_chars=max_chars,
+    )
 
 
 @app.command()

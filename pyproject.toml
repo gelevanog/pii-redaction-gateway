@@ -13,6 +13,7 @@ dependencies = [
     "fastapi",
     "httpx",
     "jinja2",
+    "mcp==2.3.0",
     "phonenumbers",
     "pydantic",
     "pydantic-settings",

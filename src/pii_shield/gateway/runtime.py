@@ -85,7 +85,8 @@ def build_vault(settings: Settings) -> tuple[Vault, bytes, bool]:
     return Vault(backend, key, ttl_seconds=settings.vault_ttl_seconds), key, ephemeral
 
 
-def build_pipeline(settings: Settings) -> tuple[DetectionPipeline, str]:
+def build_pipeline(settings: Settings, *, llm_detector: bool = True) -> tuple[DetectionPipeline, str]:
+    """Detectors from settings. `llm_detector=False` never builds the LLM detector (no API calls possible)."""
     pipeline = DetectionPipeline(ner_expected=settings.ner_enabled)
     status = "disabled (patterns only)"
     if settings.ner_enabled:
@@ -104,7 +105,7 @@ def build_pipeline(settings: Settings) -> tuple[DetectionPipeline, str]:
                     pipeline.ner = None
                     status = f"unavailable: {exc}"
                     log.error("ner.unavailable", error=str(exc)[:200])
-    if settings.has_key(settings.llm_detector_provider):
+    if llm_detector and settings.has_key(settings.llm_detector_provider):
         try:
             provider = budgeted(
                 build_provider(
